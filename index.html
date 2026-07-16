@@ -304,7 +304,6 @@
                 price: 5000, 
                 category: "skincare", 
                 imgPromo: "Imagen 20.jpg", 
-                imgReal: "Imagen 20.jpg",  
                 description: "Elimina los puntos negros de tu nariz de manera efectiva y sencilla. Incluye tres tiras nasales que ayudan a suavizar, remover profundamente las espinillas y limpiar impurezas. Fórmula balanceada para el cuidado de tu piel.",
                 stock: 15
             },
@@ -313,8 +312,7 @@
                 name: "Parches Círculos Bye Granos Bloomshell", 
                 price: 12000, 
                 category: "skincare", 
-                imgPromo: "Imagen 21.jpg", 
-                imgReal: "Imagen 21.jpg",  
+                imgPromo: "Imagen 21.jpg",  
                 description: "Ideales para tratar barritos y espinillas. Estas pegatinas adhesivas se colocan sobre el granito absorbiendo el exceso de grasa y calmando la inflamación gracias a su contenido de ácido salicílico y extracto de árbol de té.",
                 stock: 12
             },
@@ -611,12 +609,7 @@
                 const cardHTML = `
                     <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 p-2.5 flex flex-col justify-between h-full shadow-sm hover:shadow-md transition-shadow fade-in relative">
                         <!-- Switcher para ver foto real o promocional si difieren -->
-                        ${p.imgPromo !== p.imgReal ? `
-                            <button onclick="toggleCardImage(${p.id}, event)" class="absolute top-3 left-3 z-10 bg-white/95 border border-madek-accent text-[8px] font-bold py-1 px-2.5 rounded-full shadow-sm text-madek-blue active:scale-95 transition-all">
-                                <i class="fa-solid fa-camera"></i> ${isRealActive ? 'Ver Catálogo' : 'Ver Foto Real'}
-                            </button>
-                        ` : ''}
-
+                
                         <div onclick="openProductDetail(${p.id})" class="cursor-pointer">
                             <!-- Contenedor Imagen -->
                             <div class="bg-madek-cream/50 rounded-xl overflow-hidden aspect-square mb-2.5 flex items-center justify-center relative border border-gray-50">
