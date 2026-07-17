@@ -856,20 +856,6 @@
             let currentImgState = activeImageStates[product.id] || 'promo';
             setDetailImageState(currentImgState);
 
-            // Switcher de Foto Real
-            const switcher = document.getElementById('detailSwitchBtn');
-            if (product.imgPromo !== product.imgReal) {
-                switcher.classList.remove('hidden');
-                switcher.onclick = function() {
-                    let activeState = activeImageStates[product.id];
-                    let newState = activeState === 'promo' ? 'real' : 'promo';
-                    activeImageStates[product.id] = newState; 
-                    setDetailImageState(newState);
-                };
-            } else {
-                switcher.classList.add('hidden');
-            }
-
             // Añadir al carrito
             const addButton = document.getElementById('addDetailToCartBtn');
             addButton.onclick = () => {
