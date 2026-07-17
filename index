@@ -111,10 +111,10 @@
     <section class="bg-white px-4 py-4 border-b border-gray-100">
         <div class="max-w-md mx-auto">
             <div class="bg-madek-accent/40 rounded-2xl p-3 text-center mb-4 border border-madek-accent/75">
-             <p class="text-xs text-madek-blue font-medium flex items-center justify-center gap-1.5">
-             <i class="fa-solid fa-location-dot"></i> Orito, Putumayo 
-              <span class="mx-1 opacity-50">|</span>
-              <i class="fa-solid fa-heart text-madek-blue"></i> ¡Pide directo por WhatsApp! Servicio local rápido y seguro.
+               <p class="text-xs text-madek-blue font-medium flex items-center justify-center gap-1.5">
+               <i class="fa-solid fa-location-dot"></i> Orito, Putumayo 
+               <span class="mx-1 opacity-50">|</span>
+               <i class="fa-solid fa-heart text-madek-blue"></i> ¡Pide directo por WhatsApp! Servicio local rápido y seguro.
             </p>
           </div>
 
@@ -122,8 +122,8 @@
             <div class="relative">
                 <input type="text" id="searchInput" placeholder="Buscar tónicos, protectores, bálsamos, splash..." 
                        class="w-full bg-gray-50 border border-gray-200 text-sm rounded-2xl pl-11 pr-10 py-3 focus:outline-none focus:border-madek-blue focus:bg-white transition-all">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                <button onclick="clearSearch()" id="clearSearchBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <button onclick="clearSearch()" id="clearSearchBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1">
                     <i class="fa-solid fa-circle-xmark"></i>
                 </button>
             </div>
