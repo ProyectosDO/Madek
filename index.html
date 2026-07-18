@@ -308,26 +308,233 @@
     </nav>
 
     <script>
-        // Variable global para guardar los productos que vienen de Google
-let products = [];
-
-// Función para obtener productos desde Google Sheets
-async function fetchProducts() {
-    const url = "https://script.google.com/macros/s/AKfycbzB1GDIEBgudoc3yJ9FPHwM6VSDN8adM-W0pex_C47OcqeH1BQCQwJPtBaQ0gNV5dPsrw/exec"; // Pega aquí la URL que copiaste
-    try {
-        const response = await fetch(url);
-        products = await response.json();
-        renderCatalog(); // Volvemos a dibujar la pantalla con los datos nuevos
-    } catch (error) {
-        console.error("Error al cargar productos:", error);
-    }
-}
-
-// Llama a esta función en tu window.onload
-window.onload = function() {
-    fetchProducts(); // Carga desde la nube en lugar de usar la lista fija
-    // ... resto de tu código de inicialización ...
-};
+        const products = [
+            { 
+                id: 1, 
+                name: "Mascarilla 3 Pasos Bioaqua", 
+                price: 5000, 
+                category: "skincare", 
+                imgPromo: "Imagen 20.jpg", 
+                description: "Elimina los puntos negros de tu nariz de manera efectiva y sencilla. Incluye tres tiras nasales que ayudan a suavizar, remover profundamente las espinillas y limpiar impurezas. Fórmula balanceada para el cuidado de tu piel.",
+                stock: 15
+            },
+            { 
+                id: 2, 
+                name: "Parches Círculos Bye Granos Bloomshell", 
+                price: 12000, 
+                category: "skincare", 
+                imgPromo: "Imagen 21.jpg",  
+                description: "Ideales para tratar barritos y espinillas. Estas pegatinas adhesivas se colocan sobre el granito absorbiendo el exceso de grasa y calmando la inflamación gracias a su contenido de ácido salicílico y extracto de árbol de té.",
+                stock: 12
+            },
+            { 
+                id: 3, 
+                name: "Kit Facial Antiacné x3 Bioaqua", 
+                price: 45000, 
+                category: "skincare", 
+                imgPromo: "Imagen 19.jpg",
+                description: "Tratamiento completo de tres pasos que controla la grasa, ayuda a desvanecer y cicatrizar marcas de acné previniendo nuevos brotes. Hidrata profundamente sin tapar los poros de tu rostro.",
+                stock: 0
+            },
+            { 
+                id: 4, 
+                name: "Tratamiento Fortalecedor y de Crecimiento para Pestañas Bioaqua", 
+                price: 12000, 
+                category: "skincare", 
+                imgPromo: "Imagen 22.jpeg", 
+                description: "Nutre las pestañas desde la raíz hasta las puntas, añade grosor, resuelve el problema de escasez o falta de largo en las pestañas para lucir una mirada impactante y natural.",
+                stock: 14
+            },
+            { 
+                id: 5, 
+                name: "Protector Solar Textura Fluida 60 SPF Aloe Vera Bioaqua", 
+                price: 15000, 
+                category: "skincare", 
+                imgPromo: "Imagen 23", 
+                description: "El Protector solar con extracto de aloe vera 60 SPF de Bioaqua, no solo te brinda una potente protección contra los daños del sol, sino que también nutre tu piel con las propiedades calmantes e hidratantes del aloe vera.",
+                stock: 18
+            },
+            { 
+                id: 6, 
+                name: "Protector Solar Retinol Bioaqua", 
+                price: 13000, 
+                category: "skincare", 
+                imgPromo: "Imagen 24",  
+                description: "Protege tu piel mientras combates los signos del envejecimiento con el innovador Bloqueador Solar Bioaqua con Retinol. Esta fórmula avanzada ofrece una alta protección SPF 50+ contra los rayos UVB y PA+++ contra los UVA, renovando tu cutis durante el día.",
+                stock: 11
+            },
+            { 
+                id: 7, 
+                name: "Protector Solar Niacinamida Bioaqua", 
+                price: 13000, 
+                category: "skincare", 
+                imgPromo: "Imagen 25.jpg", 
+                description: "Protector solar facial con niacinamida y textura ligera, ideal para mantener la piel hidratada, fresca y con una apariencia más luminosa. Su fórmula de rápida absorción deja un acabado suave y cómodo para el uso diario, sin sensación grasosa.",
+                stock: 16
+            },
+            { 
+                id: 15, 
+                name: "Tónico Facial Rosas + Colágeno Purpure", 
+                price: 20000, 
+                category: "skincare", 
+                imgPromo: "Imagen 13.jpg", 
+                description: "Refresca y equilibra tu piel con el Tónico Facial Agua de Rosas Purpure. Su fórmula delicada calma y revitaliza. Enriquecido con colágeno, elastina, ácido hialurónico, vitamina C y E, libre de parabenos.",
+                stock: 14
+            },
+            { 
+                id: 16, 
+                name: "Limpiador Facial Bifásico con Extracto de Centella Lula", 
+                price: 35000, 
+                category: "skincare", 
+                imgPromo: "Imagen 12.jpg", 
+                description: "Este limpiador combina lo mejor del agua y el aceite para eliminar fácilmente el maquillaje (incluso el resistente al agua) sin dejar sensación grasosa ni resecar. Ideal para todo tipo de piel, incluso las más sensibles.",
+                stock: 10
+            },
+            { 
+                id: 17, 
+                name: "Caja Parches de Ojos Retinol Bioaqua", 
+                price: 15000, 
+                category: "skincare", 
+                imgPromo: "Imagen 11.jpg", 
+                description: "Formulados para el cuidado intensivo del contorno de ojos, ayudando a hidratar y mejorar la apariencia de la piel. Su combinación de colágeno, extractos de algas y retinol contribuye a una piel más suave. Contiene 80 parches.",
+                stock: 12
+            },
+            { 
+                id: 18, 
+                name: "Crema Hidratante Flor de Cerezo Bioaqua", 
+                price: 15000, 
+                category: "skincare", 
+                imgPromo: "Imagen 10.jpg", 
+                description: "Revitaliza tu piel con la Crema Facial flor de cerezo, diseñada para nutrir, hidratar y restaurar la suavidad y elasticidad, devolviendo un aspecto fresco y luminoso.",
+                stock: 15
+            },
+            { 
+                id: 19, 
+                name: "Mascarilla Ácido Salicílico Bioaqua", 
+                price: 14000, 
+                category: "skincare", 
+                imgPromo: "Imagen 9.jpg", 
+                description: "Combate eficazmente la piel grasa y poros obstruidos, penetrando profundamente para disolver restos de células muertas. Ideal para tratar barritos y poros rojos inflamados.",
+                stock: 0
+            },
+            { 
+                id: 20, 
+                name: "Hidratante Facial en Barra Lula", 
+                price: 21000, 
+                category: "skincare", 
+                imgPromo: "Imagen 8.jpg", 
+                description: "Barra hidratante. Pepino: Calma y descongestiona con cafeína estimulante. Rosas: Devuelve la frescura y el brillo natural para pieles que lucen cansadas o sin vida.",
+                stock: 11
+            },
+            { 
+                id: 21, 
+                name: "Hidratante de Aloe Vera Lula", 
+                price: 19500, 
+                category: "skincare", 
+                imgPromo: "Imagen 7.jpg", 
+                description: "Hidrata, nutre y calma la piel al instante. Textura fresca y de rápida absorción que te brinda una maravillosa sensación de confort. Rostro suave y equilibrado.",
+                stock: 14
+            },
+            { 
+                id: 22, 
+                name: "Vitamina C 100 ml Bioaqua", 
+                price: 16000, 
+                category: "skincare", 
+                imgPromo: "Imagen 6.jpg",  
+                description: "Suero de vitamina C de alta concentración. Poderoso antioxidante que desacelera la oxidación celular y previene el envejecimiento prematuro de la piel.",
+                stock: 8
+            },
+            { 
+                id: 23, 
+                name: "Serum Rejuvenecedor Colágeno Bioaqua", 
+                price: 12000, 
+                category: "skincare", 
+                imgPromo: "Imagen 5.jpg", 
+                description: "Suero facial enriquecido con colágeno tipo III, formulado para hidratar profundamente, revitalizar la piel, mejorar la firmeza y aportar una apariencia más juvenil.",
+                stock: 13
+            },
+            { 
+                id: 24, 
+                name: "Contorno de Ojos con Aloe Vera Lula", 
+                price: 19500, 
+                category: "skincare", 
+                imgPromo: "Imagen 4.jpg", 
+                description: "Cremita ligera que hidrata, revitaliza y despierta la mirada. Reduce la apariencia de ojeras, bolsas y finas líneas de expresión de la zona ocular.",
+                stock: 10
+            },
+            { 
+                id: 25, 
+                name: "Contorno para Ojos de Arándanos Bioaqua", 
+                price: 9000, 
+                category: "skincare", 
+                imgPromo: "Imagen 3.jpg", 
+                description: "Nutrición intensiva para el área delicada de tus ojos. Ayuda a revitalizar, suavizar y desinflamar la piel para lucir una mirada más joven y fresca.",
+                stock: 16
+            },
+            { 
+                id: 8, 
+                name: "Lip Balm Hidratante Karite con Destellos", 
+                price: 7000, 
+                category: "labios", 
+                imgPromo: "Imagen 18.jpg", 
+                description: "Bálsamo labial ultra hidratante que aporta nutrición intensa y deja un acabado con sutiles y elegantes destellos mágicos. Perfecto para tus labios secos.",
+                stock: 20
+            },
+            { 
+                id: 9, 
+                name: "Bálsamo Hidratante Frutal Bioaqua", 
+                price: 5000, 
+                category: "labios", 
+                imgPromo: "Imagen 16.jpg", 
+                description: "Bálsamo labial hidratante disponible en extractos naturales. Restaura la jugosidad natural de tus labios y previene el agrietamiento.",
+                stock: 25
+            },
+            { 
+                id: 12, 
+                name: "Bálsamo Hidratante en Barra Long Lasting Ushas", 
+                price: 8000, 
+                category: "labios", 
+                imgPromo: "Imagen 17.jpg", 
+                description: "Bálsamo labial de larga duración marca Ushas. No aporta color, ideal para mantener tus labios nutridos con un brillo sutil y natural durante todo el día.",
+                stock: 15
+            },
+            { 
+                id: 13, 
+                name: "Mascarilla Reparadora de Labios Alissha", 
+                price: 11500, 
+                category: "labios", 
+                imgPromo: "Imagen 15.jpg", 
+                description: "Overnight Lip Mask Alissha Rosy Kiss. Enriquecida con ácido hialurónico, aceites esenciales y vitaminas para una restauración profunda mientras duermes.",
+                stock: 10
+            },
+            { 
+                id: 14, 
+                name: "Mini Splash Cabello y Cuerpo Purpure 100ml", 
+                price: 18000, 
+                category: "corporal", 
+                imgPromo: "Imagen 14.jpg",  
+                description: "Disfruta de una sensación de frescura inmediata en tu cuerpo y cabello con nuestro splash de deliciosos y duraderos aromas dulces y envolventes.",
+                stock: 0
+            },
+            { 
+                id: 10, 
+                name: "Jabon Facial Nicotinamide Bioaqua", 
+                price: 14000, 
+                category: "skincare", 
+                imgPromo: "Imagen 2.jpg", 
+                description: "Espuma limpiadora facial con niacinamida y bifid yeast, ideal para purificar los poros, eliminar el exceso de grasa y suavizar la textura de la piel. Su fórmula densa y rica ayuda a remover impurezas sin resecar, dejando el rostro fresco, limpio y visiblemente más luminoso. Apto para uso diario",
+                stock: 0
+            },
+            { 
+                id: 11, 
+                name: "Jabon Facial Arroz Bioaqua", 
+                price: 12500, 
+                category: "skincare", 
+                imgPromo: "Imagen 1.jpg", 
+                description: "Lavarse la piel en la noche es un hábito clave de belleza, ya que permite que el rostro descanse de la contaminación y las impurezas acumuladas durante el día. Ayuda a mantener la piel más sana, fresca y luminosa, mientras limpia suavemente, hidrata, aclara el tono y elimina células muertas.",
+                stock: 0
+            }
+        ];
 
         let cart = [];
         let currentCategory = 'all';
