@@ -844,31 +844,31 @@
         }
 
         function openProductDetail(productId) {
-    const product = products.find(p => p.id === productId);
-    selectedProductForDetail = product;
-    detailQtyCount = 1;
-    document.getElementById('detailQty').textContent = detailQtyCount;
+               const product = products.find(p => p.id === productId);
+                selectedProductForDetail = product;
+                detailQtyCount = 1;
+                document.getElementById('detailQty').textContent = detailQtyCount;
 
-    // Datos del Modal
-    document.getElementById('detailProductName').textContent = product.name;
+                // Datos del Modal
+                document.getElementById('detailProductName').textContent = product.name;
     
-    let catLabel = "Moda Modesta";
-    if (product.category === 'skincare') catLabel = "Cuidado Facial";
-    else if (product.category === 'labios') catLabel = "Labios";
-    else if (product.category === 'corporal') catLabel = "Splash & Corporal";
+                let catLabel = "Moda Modesta";
+                if (product.category === 'skincare') catLabel = "Cuidado Facial";
+                else if (product.category === 'labios') catLabel = "Labios";
+                else if (product.category === 'corporal') catLabel = "Splash & Corporal";
 
-    document.getElementById('detailProductCategory').textContent = catLabel;
-    document.getElementById('detailProductPrice').textContent = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(product.price);
-    document.getElementById('detailProductDesc').textContent = product.description;
+                document.getElementById('detailProductCategory').textContent = catLabel;
+                document.getElementById('detailProductPrice').textContent = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(product.price);
+                document.getElementById('detailProductDesc').textContent = product.description;
 
-    // Imagen Inicial (Cargamos la imagen promocional directamente)
-    document.getElementById('detailProductImage').src = product.imgPromo;
+               // Imagen Inicial (Cargamos la imagen promocional directamente)
+               document.getElementById('detailProductImage').src = product.imgPromo;
 
-    // Añadir al carrito
-    const addButton = document.getElementById('addDetailToCartBtn');
-    addButton.onclick = () => {
-        addToCart(product, detailQtyCount);
-        closeProductDetail();
+              // Añadir al carrito
+                const addButton = document.getElementById('addDetailToCartBtn');
+               addButton.onclick = () => {
+                 addToCart(product, detailQtyCount);
+                    closeProductDetail();
     };
 
     // Pedido Directo
