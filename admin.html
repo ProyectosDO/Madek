@@ -195,599 +195,65 @@
         ></div>
 
     </div>
-<!-- ========================================== -->
-<!-- MIGRACIÓN MASIVA DE IMÁGENES ANTIGUAS -->
-<!-- ========================================== -->
+async function corregirImagenesProductos() {
 
-<div class="bg-white rounded-2xl shadow p-5 mt-5">
-
-    <h2 class="text-lg font-bold text-gray-800 mb-2">
-        Migrar imágenes antiguas
-    </h2>
-
-    <p class="text-sm text-gray-500 mb-5">
-        Selecciona todas las imágenes antiguas de tus productos.
-        El sistema identificará automáticamente el producto por el número
-        de la imagen y actualizará su imagen en Supabase.
-    </p>
-
-    <!-- SELECCIONAR IMÁGENES -->
-
-    <div class="mb-4">
-
-        <label class="block text-sm font-semibold text-gray-700 mb-1">
-            Seleccionar imágenes antiguas
-        </label>
-
-        <input
-            type="file"
-            id="oldProductsImages"
-            accept="image/*"
-            multiple
-            class="w-full border border-gray-300 rounded-xl p-3 bg-white"
-        >
-
-        <p class="text-xs text-gray-500 mt-2">
-            Ejemplo: Imagen 1.jpg, Imagen 2.jpg, Imagen 3.jpg...
-        </p>
-
-    </div>
-
-
-    <!-- LISTA DE IMÁGENES SELECCIONADAS -->
-
-    <div
-        id="migrationFileList"
-        class="hidden mb-5"
-    >
-
-        <p class="text-sm font-semibold text-gray-700 mb-2">
-            Imágenes seleccionadas:
-        </p>
-
-        <div
-            id="migrationFiles"
-            class="bg-gray-50 rounded-xl p-3 max-h-48 overflow-y-auto text-xs text-gray-600 space-y-1"
-        ></div>
-
-    </div>
-
-
-    <!-- BOTÓN DE MIGRACIÓN -->
-
-    <button
-        onclick="migrarImagenesAntiguas()"
-        id="migrateImagesBtn"
-        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition"
-    >
-        Migrar imágenes a Supabase
-    </button>
-
-
-    <!-- PROGRESO -->
-
-    <div
-        id="migrationProgressContainer"
-        class="hidden mt-5"
-    >
-
-        <div class="flex justify-between text-xs font-semibold text-gray-600 mb-1">
-
-            <span>
-                Progreso
-            </span>
-
-            <span id="migrationProgressText">
-                0 / 0
-            </span>
-
-        </div>
-
-
-        <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-
-            <div
-                id="migrationProgressBar"
-                class="bg-green-600 h-3 rounded-full transition-all"
-                style="width: 0%"
-            ></div>
-
-        </div>
-
-    </div>
-
-
-    <!-- RESULTADOS -->
-
-    <div
-        id="migrationResults"
-        class="hidden mt-5"
-    ></div>
-
-</div>
-    
-</main>
-```
-
-<script>
+    const button = document.getElementById("migrateImagesBtn");
+    const progressContainer = document.getElementById("migrationProgressContainer");
+    const progressText = document.getElementById("migrationProgressText");
+    const progressBar = document.getElementById("migrationProgressBar");
+    const results = document.getElementById("migrationResults");
 
     // ==========================================
-    // CONFIGURACIÓN DE SUPABASE
-    // ==========================================
-
-    const SUPABASE_URL =
-        "https://rmvnvvwjdvtiptpceofp.supabase.co";
-
-    const SUPABASE_KEY =
-        "sb_publishable_dH0slkk8BsAii_v6lcAkHg_zeerTNp7";
-
-
-    const supabaseClient = supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-
-    // ==========================================
-    // VISTA PREVIA DE LA IMAGEN
-    // ==========================================
-
-    document
-        .getElementById("productImage")
-        .addEventListener("change", function(event) {
-
-            const file = event.target.files[0];
-
-            if (!file) {
-                return;
-            }
-
-            const preview =
-                document.getElementById("imagePreview");
-
-            const container =
-                document.getElementById("imagePreviewContainer");
-
-            preview.src =
-                URL.createObjectURL(file);
-
-            container.classList.remove("hidden");
-
-        });
-
-
-    // ==========================================
-    // MOSTRAR MENSAJE
-    // ==========================================
-
-    function mostrarMensaje(texto, tipo) {
-
-        const message =
-            document.getElementById("message");
-
-        message.textContent = texto;
-
-        message.classList.remove(
-            "hidden",
-            "bg-green-100",
-            "text-green-700",
-            "bg-red-100",
-            "text-red-700"
-        );
-
-        if (tipo === "success") {
-
-            message.classList.add(
-                "bg-green-100",
-                "text-green-700"
-            );
-
-        } else {
-
-            message.classList.add(
-                "bg-red-100",
-                "text-red-700"
-            );
-
-        }
-
-    }
-
-
-    // ==========================================
-    // GUARDAR PRODUCTO
-    // ==========================================
-
-    async function guardarProducto() {
-
-        const name =
-            document
-                .getElementById("productName")
-                .value
-                .trim();
-
-        const price =
-            Number(
-                document
-                    .getElementById("productPrice")
-                    .value
-            );
-
-        const category =
-            document
-                .getElementById("productCategory")
-                .value;
-
-        const description =
-            document
-                .getElementById("productDescription")
-                .value
-                .trim();
-
-        const stock =
-            Number(
-                document
-                    .getElementById("productStock")
-                    .value
-            );
-
-        const imageFile =
-            document
-                .getElementById("productImage")
-                .files[0];
-
-
-        // ==========================================
-        // VALIDACIONES
-        // ==========================================
-
-        if (!name) {
-
-            mostrarMensaje(
-                "Escribe el nombre del producto.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (!price || price <= 0) {
-
-            mostrarMensaje(
-                "Escribe un precio válido.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (!imageFile) {
-
-            mostrarMensaje(
-                "Selecciona una imagen.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        const button =
-            document.getElementById("saveProductBtn");
-
-        button.disabled = true;
-
-        button.textContent =
-            "Subiendo producto...";
-
-
-        try {
-
-            // ==========================================
-            // CREAR NOMBRE ÚNICO PARA LA IMAGEN
-            // ==========================================
-
-            const fileExtension =
-                imageFile.name
-                    .split(".")
-                    .pop();
-
-            const fileName =
-                `${Date.now()}.${fileExtension}`;
-
-
-            // ==========================================
-            // SUBIR IMAGEN A SUPABASE STORAGE
-            // ==========================================
-
-            const {
-                data: uploadData,
-                error: uploadError
-            } = await supabaseClient
-                .storage
-                .from("productos")
-                .upload(
-                    fileName,
-                    imageFile,
-                    {
-                        cacheControl: "3600",
-                        upsert: false
-                    }
-                );
-
-
-            if (uploadError) {
-
-    console.error(
-        "Error subiendo imagen:",
-        uploadError
-    );
-
-    throw new Error(
-        uploadError.message
-    );
-
-}
-
-
-            // ==========================================
-            // OBTENER URL PÚBLICA
-            // ==========================================
-
-            const {
-                data: publicUrlData
-            } =
-                supabaseClient
-                    .storage
-                    .from("productos")
-                    .getPublicUrl(fileName);
-
-
-            const imageUrl =
-                publicUrlData.publicUrl;
-
-
-            console.log(
-                "URL de imagen:",
-                imageUrl
-            );
-
-
-            // ==========================================
-            // GUARDAR PRODUCTO EN TABLA
-            // ==========================================
-
-            const {
-                data: productData,
-                error: productError
-            } =
-                await supabaseClient
-                    .from("productos")
-                    .insert([
-
-                        {
-                            name: name,
-                            price: price,
-                            category: category,
-                            description: description,
-                            stock: stock,
-                            img_promo: imageUrl
-                        }
-
-                    ])
-                    .select();
-
-
-            if (productError) {
-
-               console.error(
-               "Error guardando producto:",
-               productError
-                 );
-
-               throw new Error(
-              productError.message
-            );
-
-           }
-
-
-            console.log(
-                "Producto guardado:",
-                productData
-            );
-
-
-            // ==========================================
-            // ÉXITO
-            // ==========================================
-
-            mostrarMensaje(
-                "✅ Producto guardado correctamente.",
-                "success"
-            );
-
-
-            // Limpiar formulario
-
-            document
-                .getElementById("productName")
-                .value = "";
-
-            document
-                .getElementById("productPrice")
-                .value = "";
-
-            document
-                .getElementById("productDescription")
-                .value = "";
-
-            document
-                .getElementById("productStock")
-                .value = "0";
-
-            document
-                .getElementById("productImage")
-                .value = "";
-
-            document
-                .getElementById("imagePreviewContainer")
-                .classList.add("hidden");
-
-
-        } catch (error) {
-
-            console.error(
-                "Error:",
-                error
-            );
-
-            mostrarMensaje(
-                "❌ " + error.message,
-                "error"
-            );
-
-        }
-
-
-        button.disabled = false;
-
-        button.textContent =
-            "Guardar producto";
-
-    }
-// ==========================================
-// MOSTRAR ARCHIVOS SELECCIONADOS
-// ==========================================
-
-document
-    .getElementById("oldProductsImages")
-    .addEventListener("change", function(event) {
-
-        const files = Array.from(event.target.files);
-
-        const listContainer =
-            document.getElementById("migrationFileList");
-
-        const filesContainer =
-            document.getElementById("migrationFiles");
-
-        if (files.length === 0) {
-            listContainer.classList.add("hidden");
-            return;
-        }
-
-        filesContainer.innerHTML = "";
-
-        files.forEach(file => {
-
-            const item = document.createElement("div");
-
-            item.textContent =
-                "📷 " + file.name;
-
-            filesContainer.appendChild(item);
-
-        });
-
-        listContainer.classList.remove("hidden");
-
-    });
-
-async function migrarImagenesAntiguas() {
-
-    const input =
-        document.getElementById("oldProductsImages");
-
-    const files =
-        Array.from(input.files);
-
-    const button =
-        document.getElementById("migrateImagesBtn");
-
-    const progressContainer =
-        document.getElementById("migrationProgressContainer");
-
-    const progressText =
-        document.getElementById("migrationProgressText");
-
-    const progressBar =
-        document.getElementById("migrationProgressBar");
-
-    const results =
-        document.getElementById("migrationResults");
-
-
-    // ==========================================
-    // RELACIÓN IMAGEN → ID DEL PRODUCTO
+    // RELACIÓN CORRECTA:
+    // ID DEL PRODUCTO → NOMBRE DE LA IMAGEN
     // ==========================================
 
     const imagenProducto = {
 
-        "Imagen 1.jpg": 11,
-        "Imagen 2.jpg": 10,
-        "Imagen 3.jpg": 25,
-        "Imagen 4.jpg": 24,
-        "Imagen 5.jpg": 23,
-        "Imagen 6.jpg": 22,
-        "Imagen 7.jpg": 21,
-        "Imagen 8.jpg": 20,
-        "Imagen 9.jpg": 19,
-        "Imagen 10.jpg": 18,
-        "Imagen 11.jpg": 17,
-        "Imagen 12.jpg": 16,
-        "Imagen 13.jpg": 15,
-        "Imagen 14.jpg": 14,
-        "Imagen 15.jpg": 13,
-        "Imagen 16.jpg": 9,
-        "Imagen 17.jpg": 12,
-        "Imagen 18.jpg": 8,
-        "Imagen 19.jpg": 3,
-        "Imagen 20.jpg": 1,
-        "Imagen 21.jpg": 2,
-
-        "Imagen 22.jpeg": 4,
-
-        "Imagen 23": 5,
-        "Imagen 24": 6,
-
-        "Imagen 25.jpg": 7,
-        "Imagen 26.jpeg": 26,
-        "Imagen 27.jpg": 27,
-        "Imagen 28.jpg": 28,
-        "Imagen 29.jpg": 29,
-        "Imagen 30.jpg": 30,
-        "Imagen 31.jpg": 31,
-        "Imagen 32.jpg": 32,
-        "Imagen 33.jpg": 33,
-        "Imagen 34.jpg": 34,
-        "Imagen 35.jpg": 35,
-        "Imagen 36.jpg": 36,
-        "Imagen 37.jpg": 37,
-        "Imagen 38.jpg": 38,
-        "Imagen 39.jpg": 39,
-        "Imagen 40.jpg": 40,
-        "Imagen 41.jpg": 41,
-        "Imagen 42.jpg": 42
+        11: "Imagen 1.jpg",
+        10: "Imagen 2.jpg",
+        25: "Imagen 3.jpg",
+        24: "Imagen 4.jpg",
+        23: "Imagen 5.jpg",
+        22: "Imagen 6.jpg",
+        21: "Imagen 7.jpg",
+        20: "Imagen 8.jpg",
+        19: "Imagen 9.jpg",
+        18: "Imagen 10.jpg",
+        17: "Imagen 11.jpg",
+        16: "Imagen 12.jpg",
+        15: "Imagen 13.jpg",
+        14: "Imagen 14.jpg",
+        13: "Imagen 15.jpg",
+        9: "Imagen 16.jpg",
+        12: "Imagen 17.jpg",
+        8: "Imagen 18.jpg",
+        3: "Imagen 19.jpg",
+        1: "Imagen 20.jpg",
+        2: "Imagen 21.jpg",
+        4: "Imagen 22.jpeg",
+        5: "Imagen 23",
+        6: "Imagen 24",
+        7: "Imagen 25.jpg",
+        26: "Imagen 26.jpeg",
+        27: "Imagen 27.jpg",
+        28: "Imagen 28.jpg",
+        29: "Imagen 29.jpg",
+        30: "Imagen 30.jpg",
+        31: "Imagen 31.jpg",
+        32: "Imagen 32.jpg",
+        33: "Imagen 33.jpg",
+        34: "Imagen 34.jpg",
+        35: "Imagen 35.jpg",
+        36: "Imagen 36.jpg",
+        37: "Imagen 37.jpg",
+        38: "Imagen 38.jpg",
+        39: "Imagen 39.jpg",
+        40: "Imagen 40.jpg",
+        41: "Imagen 41.jpg",
+        42: "Imagen 42.jpg"
 
     };
-
-
-    // ==========================================
-    // VALIDAR ARCHIVOS
-    // ==========================================
-
-    if (files.length === 0) {
-
-        alert(
-            "Selecciona primero las imágenes antiguas."
-        );
-
-        return;
-
-    }
 
 
     // ==========================================
@@ -795,174 +261,68 @@ async function migrarImagenesAntiguas() {
     // ==========================================
 
     button.disabled = true;
-
-    button.textContent =
-        "Migrando imágenes...";
+    button.textContent = "Corrigiendo imágenes...";
 
     progressContainer.classList.remove("hidden");
-
     results.classList.remove("hidden");
 
     results.innerHTML =
-        "<p class='text-sm text-gray-600'>Iniciando migración...</p>";
+        "<p class='text-sm text-gray-600'>Iniciando corrección...</p>";
 
 
     let exitosas = 0;
-
     let errores = 0;
-
     let resultadosHTML = "";
 
+    const productos = Object.entries(imagenProducto);
 
     // ==========================================
-    // PROCESAR CADA IMAGEN
+    // PROCESAR CADA PRODUCTO
     // ==========================================
 
-    for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < productos.length; i++) {
 
-        const file = files[i];
-
-        const productId =
-            imagenProducto[file.name];
-
+        const [productId, imageName] = productos[i];
 
         // ==========================================
-        // VERIFICAR SI EXISTE RELACIÓN
-        // ==========================================
-
-        if (!productId) {
-
-            errores++;
-
-            resultadosHTML += `
-                <p class="text-xs text-red-600">
-                    ❌ ${file.name} - No existe una relación con ningún producto.
-                </p>
-            `;
-
-            continue;
-
-        }
-
-
-        // ==========================================
-        // BUSCAR PRODUCTO
-        // ==========================================
-
-        const {
-            data: product,
-            error: productSearchError
-        } = await supabaseClient
-            .from("productos")
-            .select("id, name")
-            .eq("id", productId)
-            .maybeSingle();
-
-
-        if (productSearchError) {
-
-            console.error(
-                "Error buscando producto:",
-                productSearchError
-            );
-
-            errores++;
-
-            resultadosHTML += `
-                <p class="text-xs text-red-600">
-                    ❌ ${file.name} - Error buscando producto ID ${productId}.
-                </p>
-            `;
-
-            continue;
-
-        }
-
-
-        if (!product) {
-
-            errores++;
-
-            resultadosHTML += `
-                <p class="text-xs text-red-600">
-                    ⚠️ ${file.name} - No existe el producto ID ${productId}.
-                </p>
-            `;
-
-            continue;
-
-        }
-
-
-        // ==========================================
-        // SUBIR IMAGEN A STORAGE
-        // ==========================================
-
-        const {
-            error: uploadError
-        } = await supabaseClient
-            .storage
-            .from("productos")
-            .upload(
-                file.name,
-                file,
-                {
-                    cacheControl: "3600",
-                    upsert: true
-                }
-            );
-
-
-        if (uploadError) {
-
-            console.error(
-                "Error subiendo imagen:",
-                uploadError
-            );
-
-            errores++;
-
-            resultadosHTML += `
-                <p class="text-xs text-red-600">
-                    ❌ ${file.name} - Error subiendo imagen: ${uploadError.message}
-                </p>
-            `;
-
-            continue;
-
-        }
-
-
-        // ==========================================
-        // OBTENER URL PÚBLICA
+        // OBTENER URL PÚBLICA DE LA IMAGEN
         // ==========================================
 
         const {
             data: publicUrlData
-        } =
-            supabaseClient
-                .storage
-                .from("productos")
-                .getPublicUrl(file.name);
+        } = supabaseClient
+            .storage
+            .from("productos")
+            .getPublicUrl(imageName);
+
+        const imageUrl = publicUrlData.publicUrl;
 
 
-        const imageUrl =
-            publicUrlData.publicUrl;
+        console.log(
+            `Producto ${productId} → ${imageName}`
+        );
 
 
         // ==========================================
-        // ACTUALIZAR PRODUCTO
+        // ACTUALIZAR PRODUCTO EN SUPABASE
         // ==========================================
 
         const {
+            data: updatedProduct,
             error: updateError
         } = await supabaseClient
             .from("productos")
             .update({
                 img_promo: imageUrl
             })
-            .eq("id", productId);
+            .eq("id", Number(productId))
+            .select("id, name, img_promo")
+            .maybeSingle();
 
+
+        // ==========================================
+        // VERIFICAR ERROR
+        // ==========================================
 
         if (updateError) {
 
@@ -975,26 +335,33 @@ async function migrarImagenesAntiguas() {
 
             resultadosHTML += `
                 <p class="text-xs text-red-600">
-                    ❌ ${file.name} - Imagen subida, pero no se pudo actualizar el producto.
+                    ❌ ID ${productId} - ${imageName}
+                    - ${updateError.message}
                 </p>
             `;
 
-            continue;
+        } else if (!updatedProduct) {
+
+            errores++;
+
+            resultadosHTML += `
+                <p class="text-xs text-red-600">
+                    ⚠️ ID ${productId} - No se encontró el producto.
+                </p>
+            `;
+
+        } else {
+
+            exitosas++;
+
+            resultadosHTML += `
+                <p class="text-xs text-green-600">
+                    ✅ ID ${productId} → ${imageName}
+                    → ${updatedProduct.name}
+                </p>
+            `;
 
         }
-
-
-        // ==========================================
-        // ÉXITO
-        // ==========================================
-
-        exitosas++;
-
-        resultadosHTML += `
-            <p class="text-xs text-green-600">
-                ✅ ${file.name} → ID ${productId} → ${product.name}
-            </p>
-        `;
 
 
         // ==========================================
@@ -1003,17 +370,14 @@ async function migrarImagenesAntiguas() {
 
         const porcentaje =
             Math.round(
-                ((i + 1) / files.length) * 100
+                ((i + 1) / productos.length) * 100
             );
 
-
         progressText.textContent =
-            `${i + 1} / ${files.length}`;
-
+            `${i + 1} / ${productos.length}`;
 
         progressBar.style.width =
             `${porcentaje}%`;
-
 
         results.innerHTML =
             resultadosHTML;
@@ -1028,7 +392,7 @@ async function migrarImagenesAntiguas() {
     button.disabled = false;
 
     button.textContent =
-        "Migrar imágenes a Supabase";
+        "Corregir imágenes de productos";
 
 
     results.innerHTML = `
@@ -1036,11 +400,11 @@ async function migrarImagenesAntiguas() {
         <div class="bg-green-50 border border-green-200 rounded-xl p-4">
 
             <p class="font-bold text-green-700 mb-2">
-                Migración finalizada
+                Corrección finalizada
             </p>
 
             <p class="text-sm text-green-700">
-                ✅ Imágenes migradas correctamente: ${exitosas}
+                ✅ Imágenes corregidas: ${exitosas}
             </p>
 
             <p class="text-sm text-red-600">
@@ -1054,6 +418,8 @@ async function migrarImagenesAntiguas() {
         </div>
 
     `;
+
+}
 
 }
 
