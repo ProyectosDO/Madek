@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Panel Administrador - Madek</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+</style>
+```
+
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+```
+<!-- ENCABEZADO -->
+<header class="bg-blue-700 text-white p-4 shadow">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-xl font-bold">
+            Panel de Administrador
+        </h1>
+        <p class="text-sm text-blue-100">
+            Gestión de productos - Madek
+        </p>
+    </div>
+</header>
+
+
+<!-- CONTENIDO PRINCIPAL -->
+<main class="max-w-2xl mx-auto p-4">
+
+    <div class="bg-white rounded-2xl shadow p-5">
+
+        <h2 class="text-lg font-bold text-gray-800 mb-5">
+            Agregar nuevo producto
+        </h2>
+
+
+        <!-- NOMBRE -->
+        <div class="mb-4">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+                Nombre del producto
+            </label>
+
+            <input
+                type="text"
+                id="productName"
+                placeholder="Ej: Protector Solar Bioaqua"
+                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
+            >
+        </div>
+
+
+        <!-- PRECIO -->
+        <div class="mb-4">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+                Precio
+            </label>
+
+            <input
+                type="number"
+                id="productPrice"
+                placeholder="Ej: 15000"
+                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
+            >
+        </div>
+
+
+        <!-- CATEGORÍA -->
+        <div class="mb-4">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+                Categoría
+            </label>
+
+            <select
+                id="productCategory"
+                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
+            >
+                <option value="skincare">
+                    Cuidado Facial
+                </option>
+
+                <option value="labios">
+                    Labios
+                </option>
+
+                <option value="corporal">
+                    Splash & Corporal
+                </option>
+
+                <option value="moda">
+                    Moda Modesta
+                </option>
+            </select>
+        </div>
+
+
+        <!-- DESCRIPCIÓN -->
+        <div class="mb-4">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+                Descripción
+            </label>
+
+            <textarea
+                id="productDescription"
+                rows="4"
+                placeholder="Descripción del producto..."
+                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
+            ></textarea>
+        </div>
+
+
+        <!-- STOCK -->
+        <div class="mb-4">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+                Stock disponible
+            </label>
+
+            <input
+                type="number"
+                id="productStock"
+                min="0"
+                value="0"
+                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
+            >
+        </div>
+
+
+        <!-- IMAGEN -->
+        <div class="mb-5">
+
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+                Imagen del producto
+            </label>
+
+            <input
+                type="file"
+                id="productImage"
+                accept="image/*"
+                class="w-full border border-gray-300 rounded-xl p-3 bg-white"
+            >
+
+            <p class="text-xs text-gray-500 mt-2">
+                Selecciona una imagen desde tu computador.
+            </p>
+
+        </div>
+
+
+        <!-- PREVISUALIZACIÓN -->
+        <div
+            id="imagePreviewContainer"
+            class="hidden mb-5"
+        >
+
+            <p class="text-sm font-semibold text-gray-700 mb-2">
+                Vista previa
+            </p>
+
+            <img
+                id="imagePreview"
+                src=""
+                alt="Vista previa"
+                class="w-40 h-40 object-cover rounded-xl border border-gray-200"
+            >
+
+        </div>
+
+
+        <!-- BOTÓN -->
+        <button
+            onclick="guardarProducto()"
+            id="saveProductBtn"
+            class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl transition"
+        >
+            Guardar producto
+        </button>
+
+
+        <!-- MENSAJE -->
+        <div
+            id="message"
+            class="hidden mt-4 p-3 rounded-xl text-sm text-center"
+        ></div>
+
+    </div>
+
+</main>
+```
+
+<script>
+
+    // ==========================================
+    // CONFIGURACIÓN DE SUPABASE
+    // ==========================================
+
+    const SUPABASE_URL =
+        "https://rmvnvvwjdvtiptpceofp.supabase.co";
+
+    const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFub24iLCJpYXQiOjE3ODUzNTE0ODIsImV4cCI6MjEwMDkyNzQ4Mn0.j2tqBL393gQQkYkCDBRd78ZLYQ9zVkGhVxAK67t90yw";
+
+
+    const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+    // ==========================================
+    // VISTA PREVIA DE LA IMAGEN
+    // ==========================================
+
+    document
+        .getElementById("productImage")
+        .addEventListener("change", function(event) {
+
+            const file = event.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            const preview =
+                document.getElementById("imagePreview");
+
+            const container =
+                document.getElementById("imagePreviewContainer");
+
+            preview.src =
+                URL.createObjectURL(file);
+
+            container.classList.remove("hidden");
+
+        });
+
+
+    // ==========================================
+    // MOSTRAR MENSAJE
+    // ==========================================
+
+    function mostrarMensaje(texto, tipo) {
+
+        const message =
+            document.getElementById("message");
+
+        message.textContent = texto;
+
+        message.classList.remove(
+            "hidden",
+            "bg-green-100",
+            "text-green-700",
+            "bg-red-100",
+            "text-red-700"
+        );
+
+        if (tipo === "success") {
+
+            message.classList.add(
+                "bg-green-100",
+                "text-green-700"
+            );
+
+        } else {
+
+            message.classList.add(
+                "bg-red-100",
+                "text-red-700"
+            );
+
+        }
+
+    }
+
+
+    // ==========================================
+    // GUARDAR PRODUCTO
+    // ==========================================
+
+    async function guardarProducto() {
+
+        const name =
+            document
+                .getElementById("productName")
+                .value
+                .trim();
+
+        const price =
+            Number(
+                document
+                    .getElementById("productPrice")
+                    .value
+            );
+
+        const category =
+            document
+                .getElementById("productCategory")
+                .value;
+
+        const description =
+            document
+                .getElementById("productDescription")
+                .value
+                .trim();
+
+        const stock =
+            Number(
+                document
+                    .getElementById("productStock")
+                    .value
+            );
+
+        const imageFile =
+            document
+                .getElementById("productImage")
+                .files[0];
+
+
+        // ==========================================
+        // VALIDACIONES
+        // ==========================================
+
+        if (!name) {
+
+            mostrarMensaje(
+                "Escribe el nombre del producto.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (!price || price <= 0) {
+
+            mostrarMensaje(
+                "Escribe un precio válido.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (!imageFile) {
+
+            mostrarMensaje(
+                "Selecciona una imagen.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        const button =
+            document.getElementById("saveProductBtn");
+
+        button.disabled = true;
+
+        button.textContent =
+            "Subiendo producto...";
+
+
+        try {
+
+            // ==========================================
+            // CREAR NOMBRE ÚNICO PARA LA IMAGEN
+            // ==========================================
+
+            const fileExtension =
+                imageFile.name
+                    .split(".")
+                    .pop();
+
+            const fileName =
+                `${Date.now()}.${fileExtension}`;
+
+
+            // ==========================================
+            // SUBIR IMAGEN A SUPABASE STORAGE
+            // ==========================================
+
+            const {
+                data: uploadData,
+                error: uploadError
+            } = await supabaseClient
+                .storage
+                .from("productos")
+                .upload(
+                    fileName,
+                    imageFile,
+                    {
+                        cacheControl: "3600",
+                        upsert: false
+                    }
+                );
+
+
+            if (uploadError) {
+
+                console.error(
+                    "Error subiendo imagen:",
+                    uploadError
+                );
+
+                throw new Error(
+                    "No se pudo subir la imagen."
+                );
+
+            }
+
+
+            // ==========================================
+            // OBTENER URL PÚBLICA
+            // ==========================================
+
+            const {
+                data: publicUrlData
+            } =
+                supabaseClient
+                    .storage
+                    .from("productos")
+                    .getPublicUrl(fileName);
+
+
+            const imageUrl =
+                publicUrlData.publicUrl;
+
+
+            console.log(
+                "URL de imagen:",
+                imageUrl
+            );
+
+
+            // ==========================================
+            // GUARDAR PRODUCTO EN TABLA
+            // ==========================================
+
+            const {
+                data: productData,
+                error: productError
+            } =
+                await supabaseClient
+                    .from("productos")
+                    .insert([
+
+                        {
+                            name: name,
+                            price: price,
+                            category: category,
+                            description: description,
+                            stock: stock,
+                            img_promo: imageUrl
+                        }
+
+                    ])
+                    .select();
+
+
+            if (productError) {
+
+                console.error(
+                    "Error guardando producto:",
+                    productError
+                );
+
+                throw new Error(
+                    "La imagen se subió, pero no se pudo guardar el producto."
+                );
+
+            }
+
+
+            console.log(
+                "Producto guardado:",
+                productData
+            );
+
+
+            // ==========================================
+            // ÉXITO
+            // ==========================================
+
+            mostrarMensaje(
+                "✅ Producto guardado correctamente.",
+                "success"
+            );
+
+
+            // Limpiar formulario
+
+            document
+                .getElementById("productName")
+                .value = "";
+
+            document
+                .getElementById("productPrice")
+                .value = "";
+
+            document
+                .getElementById("productDescription")
+                .value = "";
+
+            document
+                .getElementById("productStock")
+                .value = "0";
+
+            document
+                .getElementById("productImage")
+                .value = "";
+
+            document
+                .getElementById("imagePreviewContainer")
+                .classList.add("hidden");
+
+
+        } catch (error) {
+
+            console.error(
+                "Error:",
+                error
+            );
+
+            mostrarMensaje(
+                "❌ " + error.message,
+                "error"
+            );
+
+        }
+
+
+        button.disabled = false;
+
+        button.textContent =
+            "Guardar producto";
+
+    }
+
+</script>
+
+</body>
+</html>
