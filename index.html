@@ -317,7 +317,24 @@
           SUPABASE_URL,
           SUPABASE_KEY
       );
+       async function probarConexion() {
+    const { data, error } = await supabaseClient
+        .from('productos')
+        .select('*')
+        .limit(1);
+
+    if (error) {
+        console.error("❌ Error conectando con Supabase:", error);
+        alert("❌ Hay un error de conexión. Mira la consola.");
+    } else {
+        console.log("✅ Supabase conectado correctamente:", data);
+        alert("✅ ¡Conexión con Supabase funcionando!");
+    }
+}
+
+probarConexion();
     </script>
+    
     <script>
         const products = [
             { 
