@@ -702,6 +702,48 @@ probarConexion();
                 description: "El Protector solar con extracto de aloe vera 60 SPF de Bioaqua, no solo te brinda una potente protección contra los daños del sol, sino que también nutre tu piel con las propiedades calmantes e hidratantes del aloe vera.",
                 stock: 0
             }
+            async function cargarProductosDesdeSupabase() {
+
+    const { data, error } = await supabaseClient
+        .from('productos')
+        .select('*')
+        .order('id', { ascending: true });
+
+    if (error) {
+        console.error('❌ Error cargando productos:', error);
+        return;
+    }
+
+    console.log('✅ Productos cargados desde Supabase:', data);
+
+    // Convertimos los nombres de las columnas de Supabase
+    // al formato que ya utiliza tu catálogo
+    products.length = 0;
+
+    data.forEach(producto => {
+
+        products.push({
+            id: producto.id,
+            name: producto.name,
+            price: Number(producto.price),
+            category: producto.category,
+            imgPromo: producto.img_promo,
+            description: producto.description || '',
+            stock: Number(producto.stock) || 0
+        });
+
+    });
+
+    // Reiniciar estados de imágenes
+    activeImageStates = {};
+
+    products.forEach(p => {
+        activeImageStates[p.id] = 'promo';
+    });
+
+    updateCategoryBadges();
+    renderCatalog();
+}
         ];
 
         let cart = [];
@@ -712,16 +754,10 @@ probarConexion();
         let activeImageStates = {}; 
 
         // Al iniciar la app
-        window.onload = function() {
-            // Inicializar estados de fotos
-            products.forEach(p => {
-                activeImageStates[p.id] = 'promo'; 
-            });
-
-            updateCategoryBadges();
-            renderCatalog();
-            setupSearch();
-        };
+        window.onload = async function() {
+        setupSearch();
+          await cargarProductosDesdeSupabase();
+           };
 
         function renderCatalog() {
             const grid = document.getElementById('productsGrid');
