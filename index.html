@@ -702,7 +702,9 @@ probarConexion();
                 description: "El Protector solar con extracto de aloe vera 60 SPF de Bioaqua, no solo te brinda una potente protección contra los daños del sol, sino que también nutre tu piel con las propiedades calmantes e hidratantes del aloe vera.",
                 stock: 0
             }
-            async function cargarProductosDesdeSupabase() {
+        ];
+
+         async function cargarProductosDesdeSupabase() {
 
     const { data, error } = await supabaseClient
         .from('productos')
@@ -744,7 +746,6 @@ probarConexion();
     updateCategoryBadges();
     renderCatalog();
 }
-        ];
 
         let cart = [];
         let currentCategory = 'all';
