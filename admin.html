@@ -472,16 +472,16 @@
 
             if (productError) {
 
-                console.error(
-                    "Error guardando producto:",
-                    productError
-                );
+               console.error(
+               "Error guardando producto:",
+               productError
+                 );
 
-                throw new Error(
-                    "La imagen se subió, pero no se pudo guardar el producto."
-                );
+               throw new Error(
+              productError.message
+            );
 
-            }
+           }
 
 
             console.log(
