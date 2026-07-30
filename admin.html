@@ -410,16 +410,16 @@
 
             if (uploadError) {
 
-                console.error(
-                    "Error subiendo imagen:",
-                    uploadError
-                );
+    console.error(
+        "Error subiendo imagen:",
+        uploadError
+    );
 
-                throw new Error(
-                    "No se pudo subir la imagen."
-                );
+    throw new Error(
+        uploadError.message
+    );
 
-            }
+}
 
 
             // ==========================================
