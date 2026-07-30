@@ -306,7 +306,18 @@
             <span class="text-[9px] font-bold uppercase tracking-wider">Bolsa</span>
         </button>
     </nav>
+   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+   <script>
+         const SUPABASE_URL = "https://rmvnvvwjdvtiptpceofp.supabase.co";
+
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJtdm52dndqZHZ0aXB0cGNlb2ZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzNTE0ODIsImV4cCI6MjEwMDkyNzQ4Mn0.j2tqBL393gQQkYkCDBRd78ZLYQ9zVkGhVxAK67t90yw";
+
+        const supabaseClient = supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY
+      );
+    </script>
     <script>
         const products = [
             { 
