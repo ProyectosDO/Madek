@@ -1,202 +1,848 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-```
-<title>Panel Administrador - Madek</title>
+    <title>Panel Administrador - Madek</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-    body {
-        font-family: Arial, sans-serif;
-    }
-</style>
-```
-
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 min-h-screen">
 
-```
-<!-- ENCABEZADO -->
-<header class="bg-blue-700 text-white p-4 shadow">
-    <div class="max-w-2xl mx-auto">
-        <h1 class="text-xl font-bold">
-            Panel de Administrador
-        </h1>
-        <p class="text-sm text-blue-100">
-            Gestión de productos - Madek
-        </p>
-    </div>
-</header>
+    <!-- ================================================= -->
+    <!-- PANTALLA DE LOGIN -->
+    <!-- ================================================= -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow p-6 w-full max-w-sm">
+            <h1 class="text-xl font-bold text-gray-800 mb-1 text-center">Panel Administrador</h1>
+            <p class="text-sm text-gray-500 mb-6 text-center">Inicia sesión para continuar</p>
 
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Correo</label>
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        required
+                        class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
+                        placeholder="tucorreo@ejemplo.com"
+                    >
+                </div>
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Contraseña</label>
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        required
+                        class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
+                        placeholder="••••••••"
+                    >
+                </div>
 
-<!-- CONTENIDO PRINCIPAL -->
-<main class="max-w-2xl mx-auto p-4">
+                <div id="loginMessage" class="hidden mb-4 p-3 rounded-xl text-sm text-center bg-red-100 text-red-700"></div>
 
-    <div class="bg-white rounded-2xl shadow p-5">
-
-        <h2 class="text-lg font-bold text-gray-800 mb-5">
-            Agregar nuevo producto
-        </h2>
-
-
-        <!-- NOMBRE -->
-        <div class="mb-4">
-            <label class="block text-sm font-semibold text-gray-700 mb-1">
-                Nombre del producto
-            </label>
-
-            <input
-                type="text"
-                id="productName"
-                placeholder="Ej: Protector Solar Bioaqua"
-                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
-            >
+                <button
+                    type="submit"
+                    id="loginButton"
+                    class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl transition"
+                >
+                    Iniciar sesión
+                </button>
+            </form>
         </div>
-
-
-        <!-- PRECIO -->
-        <div class="mb-4">
-            <label class="block text-sm font-semibold text-gray-700 mb-1">
-                Precio
-            </label>
-
-            <input
-                type="number"
-                id="productPrice"
-                placeholder="Ej: 15000"
-                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
-            >
-        </div>
-
-
-        <!-- CATEGORÍA -->
-        <div class="mb-4">
-            <label class="block text-sm font-semibold text-gray-700 mb-1">
-                Categoría
-            </label>
-
-            <select
-                id="productCategory"
-                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
-            >
-                <option value="skincare">
-                    Cuidado Facial
-                </option>
-
-                <option value="labios">
-                    Labios
-                </option>
-
-                <option value="corporal">
-                    Splash & Corporal
-                </option>
-
-                <option value="moda">
-                    Moda Modesta
-                </option>
-            </select>
-        </div>
-
-
-        <!-- DESCRIPCIÓN -->
-        <div class="mb-4">
-            <label class="block text-sm font-semibold text-gray-700 mb-1">
-                Descripción
-            </label>
-
-            <textarea
-                id="productDescription"
-                rows="4"
-                placeholder="Descripción del producto..."
-                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
-            ></textarea>
-        </div>
-
-
-        <!-- STOCK -->
-        <div class="mb-4">
-            <label class="block text-sm font-semibold text-gray-700 mb-1">
-                Stock disponible
-            </label>
-
-            <input
-                type="number"
-                id="productStock"
-                min="0"
-                value="0"
-                class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
-            >
-        </div>
-
-
-        <!-- IMAGEN -->
-        <div class="mb-5">
-
-            <label class="block text-sm font-semibold text-gray-700 mb-1">
-                Imagen del producto
-            </label>
-
-            <input
-                type="file"
-                id="productImage"
-                accept="image/*"
-                class="w-full border border-gray-300 rounded-xl p-3 bg-white"
-            >
-
-            <p class="text-xs text-gray-500 mt-2">
-                Selecciona una imagen desde tu computador.
-            </p>
-
-        </div>
-
-
-        <!-- PREVISUALIZACIÓN -->
-        <div
-            id="imagePreviewContainer"
-            class="hidden mb-5"
-        >
-
-            <p class="text-sm font-semibold text-gray-700 mb-2">
-                Vista previa
-            </p>
-
-            <img
-                id="imagePreview"
-                src=""
-                alt="Vista previa"
-                class="w-40 h-40 object-cover rounded-xl border border-gray-200"
-            >
-
-        </div>
-
-
-        <!-- BOTÓN -->
-        <button
-            onclick="guardarProducto()"
-            id="saveProductBtn"
-            class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl transition"
-        >
-            Guardar producto
-        </button>
-
-
-        <!-- MENSAJE -->
-        <div
-            id="message"
-            class="hidden mt-4 p-3 rounded-xl text-sm text-center"
-        ></div>
-
     </div>
 
-</script>
+    <!-- ================================================= -->
+    <!-- PANEL ADMINISTRATIVO (oculto hasta iniciar sesión) -->
+    <!-- ================================================= -->
+    <div id="adminPanel" class="hidden">
+
+    <!-- ENCABEZADO -->
+    <header class="bg-blue-700 text-white p-4 shadow">
+        <div class="max-w-2xl mx-auto flex items-center justify-between">
+            <div>
+                <h1 class="text-xl font-bold">
+                    Panel de Administrador
+                </h1>
+                <p class="text-sm text-blue-100">
+                    Gestión de productos y categorías - Madek
+                </p>
+            </div>
+            <button
+                id="logoutButton"
+                class="bg-blue-800 hover:bg-blue-900 text-white text-sm font-semibold px-4 py-2 rounded-xl transition"
+            >
+                Cerrar sesión
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="max-w-2xl mx-auto p-4 space-y-6">
+
+        <!-- ================================================= -->
+        <!-- GESTIÓN DE CATEGORÍAS -->
+        <!-- ================================================= -->
+        <div class="bg-white rounded-2xl shadow p-5">
+
+            <h2 class="text-lg font-bold text-gray-800 mb-1">
+                Categorías
+            </h2>
+            <p class="text-sm text-gray-500 mb-4">
+                Agrega, edita o elimina las categorías del catálogo.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3 mb-2">
+                <input
+                    type="text"
+                    id="categoryName"
+                    placeholder="Ej: Cuidado Facial"
+                    class="flex-1 border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
+                >
+                <button
+                    type="button"
+                    id="saveCategoryBtn"
+                    onclick="guardarCategoria()"
+                    class="bg-blue-700 hover:bg-blue-800 text-white font-bold px-5 py-3 rounded-xl transition whitespace-nowrap"
+                >
+                    Agregar categoría
+                </button>
+            </div>
+
+            <input type="hidden" id="editingCategoryId" value="">
+
+            <div id="cancelCategoryEditContainer" class="hidden mb-3">
+                <button
+                    type="button"
+                    onclick="cancelarEdicionCategoria()"
+                    class="text-sm text-gray-500 hover:text-gray-700 font-semibold"
+                >
+                    Cancelar edición
+                </button>
+            </div>
+
+            <div id="categoryMessage" class="hidden mb-4 p-3 rounded-xl text-sm text-center"></div>
+
+            <div id="categoriesList" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <p class="text-sm text-gray-400 col-span-full text-center py-4">Cargando categorías...</p>
+            </div>
+
+        </div>
+
+        <!-- ================================================= -->
+        <!-- AGREGAR / EDITAR PRODUCTO -->
+        <!-- ================================================= -->
+        <div class="bg-white rounded-2xl shadow p-5">
+
+            <h2 class="text-lg font-bold text-gray-800 mb-5" id="formTitle">
+                Agregar nuevo producto
+            </h2>
+
+            <input type="hidden" id="editingProductId" value="">
+
+            <!-- NOMBRE -->
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                    Nombre del producto
+                </label>
+                <input
+                    type="text"
+                    id="productName"
+                    placeholder="Ej: Protector Solar Bioaqua"
+                    class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
+                >
+            </div>
+
+            <!-- PRECIO -->
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                    Precio
+                </label>
+                <input
+                    type="number"
+                    id="productPrice"
+                    placeholder="Ej: 15000"
+                    class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
+                >
+            </div>
+
+            <!-- CATEGORÍA -->
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                    Categoría
+                </label>
+                <select
+                    id="productCategory"
+                    class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
+                >
+                    <option value="">Cargando categorías...</option>
+                </select>
+            </div>
+
+            <!-- DESCRIPCIÓN -->
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                    Descripción
+                </label>
+                <textarea
+                    id="productDescription"
+                    rows="4"
+                    placeholder="Descripción del producto..."
+                    class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
+                ></textarea>
+            </div>
+
+            <!-- STOCK -->
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                    Stock disponible
+                </label>
+                <input
+                    type="number"
+                    id="productStock"
+                    min="0"
+                    value="0"
+                    class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:border-blue-600"
+                >
+            </div>
+
+            <!-- IMAGEN -->
+            <div class="mb-5">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                    Imagen del producto
+                </label>
+                <input
+                    type="file"
+                    id="productImage"
+                    accept="image/*"
+                    class="w-full border border-gray-300 rounded-xl p-3 bg-white"
+                >
+                <p class="text-xs text-gray-500 mt-2">
+                    Selecciona una imagen desde tu computador (opcional al editar si no quieres cambiarla).
+                </p>
+            </div>
+
+            <!-- PREVISUALIZACIÓN -->
+            <div id="imagePreviewContainer" class="hidden mb-5">
+                <p class="text-sm font-semibold text-gray-700 mb-2">Vista previa</p>
+                <img
+                    id="imagePreview"
+                    src=""
+                    alt="Vista previa"
+                    class="w-40 h-40 object-cover rounded-xl border border-gray-200"
+                >
+            </div>
+
+            <!-- BOTONES -->
+            <div class="flex gap-3">
+                <button
+                    onclick="guardarProducto()"
+                    id="saveProductBtn"
+                    class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl transition"
+                >
+                    Guardar producto
+                </button>
+                <button
+                    onclick="cancelarEdicionProducto()"
+                    id="cancelProductEditBtn"
+                    class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-5 py-3 rounded-xl transition"
+                >
+                    Cancelar
+                </button>
+            </div>
+
+            <!-- MENSAJE -->
+            <div id="message" class="hidden mt-4 p-3 rounded-xl text-sm text-center"></div>
+
+        </div>
+
+        <!-- ================================================= -->
+        <!-- PRODUCTOS REGISTRADOS -->
+        <!-- ================================================= -->
+        <div class="bg-white rounded-2xl shadow p-5">
+
+            <h2 class="text-lg font-bold text-gray-800 mb-4">
+                Productos registrados
+            </h2>
+
+            <div id="productsList" class="space-y-3">
+                <p class="text-sm text-gray-400 text-center py-4">Cargando productos...</p>
+            </div>
+
+        </div>
+
+    </main>
+
+    </div> <!-- fin #adminPanel -->
+
+    <!-- ===================================================== -->
+    <!-- SUPABASE -->
+    <!-- ===================================================== -->
+    <script>
+
+        const SUPABASE_URL = "https://phjloiqnnshgayrfkfbl.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_QVMZnnEJcfkujinw0w82QQ_qBfPTYo-";
+
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const CATEGORIES_TABLE = "categories";
+        const PRODUCTS_TABLE = "products";
+        const STORAGE_BUCKET = "madek-productos";
+
+        let categorias = [];
+        let productos = [];
+
+        // =====================================================
+        // AUTENTICACIÓN
+        // =====================================================
+
+        const loginScreen = document.getElementById("loginScreen");
+        const adminPanel = document.getElementById("adminPanel");
+        const loginForm = document.getElementById("loginForm");
+        const loginButton = document.getElementById("loginButton");
+        const loginMessage = document.getElementById("loginMessage");
+        const logoutButton = document.getElementById("logoutButton");
+
+        function mostrarPanelAdmin() {
+            loginScreen.classList.add("hidden");
+            adminPanel.classList.remove("hidden");
+            cargarCategorias().then(cargarProductosAdmin);
+        }
+
+        function mostrarLogin() {
+            adminPanel.classList.add("hidden");
+            loginScreen.classList.remove("hidden");
+        }
+
+        async function verificarSesion() {
+            const { data, error } = await supabaseClient.auth.getSession();
+            if (error) {
+                console.error("Error verificando sesión:", error);
+                mostrarLogin();
+                return;
+            }
+            if (data && data.session) {
+                mostrarPanelAdmin();
+            } else {
+                mostrarLogin();
+            }
+        }
+
+        loginForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById("loginEmail").value.trim();
+            const password = document.getElementById("loginPassword").value;
+
+            loginButton.disabled = true;
+            loginButton.textContent = "Iniciando sesión...";
+            loginMessage.classList.add("hidden");
+
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+                if (error) {
+                    loginMessage.textContent = "Correo o contraseña incorrectos.";
+                    loginMessage.classList.remove("hidden");
+                    return;
+                }
+
+                mostrarPanelAdmin();
+                loginForm.reset();
+
+            } catch (error) {
+                console.error("Error inesperado al iniciar sesión:", error);
+                loginMessage.textContent = "Ocurrió un error al iniciar sesión.";
+                loginMessage.classList.remove("hidden");
+            } finally {
+                loginButton.disabled = false;
+                loginButton.textContent = "Iniciar sesión";
+            }
+        });
+
+        logoutButton.addEventListener("click", async function () {
+            logoutButton.disabled = true;
+            try {
+                await supabaseClient.auth.signOut();
+                mostrarLogin();
+            } catch (error) {
+                console.error("Error cerrando sesión:", error);
+            } finally {
+                logoutButton.disabled = false;
+            }
+        });
+
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            if (!session) {
+                mostrarLogin();
+            }
+        });
+
+        // =====================================================
+        // UTILIDADES
+        // =====================================================
+
+        function slugify(texto) {
+            return texto
+                .toString()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9\s-]/g, "")
+                .replace(/\s+/g, "-")
+                .replace(/-+/g, "-");
+        }
+
+        function formatearPrecio(valor) {
+            return new Intl.NumberFormat("es-CO", {
+                style: "currency",
+                currency: "COP",
+                maximumFractionDigits: 0
+            }).format(valor || 0);
+        }
+
+        function mostrarMensaje(texto, tipo = "success") {
+            const el = document.getElementById("message");
+            if (!el) return;
+            el.classList.remove("hidden", "bg-green-100", "text-green-700", "bg-red-100", "text-red-700", "bg-yellow-100", "text-yellow-700");
+            if (tipo === "success") el.classList.add("bg-green-100", "text-green-700");
+            else if (tipo === "error") el.classList.add("bg-red-100", "text-red-700");
+            else el.classList.add("bg-yellow-100", "text-yellow-700");
+            el.textContent = texto;
+            setTimeout(() => el.classList.add("hidden"), 4000);
+        }
+
+        function mostrarMensajeCategoria(texto, tipo = "success") {
+            const el = document.getElementById("categoryMessage");
+            if (!el) return;
+            el.classList.remove("hidden", "bg-green-100", "text-green-700", "bg-red-100", "text-red-700", "bg-yellow-100", "text-yellow-700");
+            if (tipo === "success") el.classList.add("bg-green-100", "text-green-700");
+            else if (tipo === "error") el.classList.add("bg-red-100", "text-red-700");
+            else el.classList.add("bg-yellow-100", "text-yellow-700");
+            el.textContent = texto;
+            setTimeout(() => el.classList.add("hidden"), 4000);
+        }
+
+        // =====================================================
+        // CATEGORÍAS: CARGAR
+        // =====================================================
+
+        async function cargarCategorias() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from(CATEGORIES_TABLE)
+                    .select("*")
+                    .order("name", { ascending: true });
+
+                if (error) throw error;
+
+                categorias = data || [];
+
+                // Select del formulario de producto
+                const select = document.getElementById("productCategory");
+                const valorActual = select.value;
+                select.innerHTML = `<option value="">Seleccionar categoría</option>`;
+                categorias.forEach(cat => {
+                    const opt = document.createElement("option");
+                    opt.value = cat.slug;
+                    opt.textContent = cat.name;
+                    select.appendChild(opt);
+                });
+                if (valorActual) select.value = valorActual;
+
+                renderizarListaCategorias();
+
+            } catch (error) {
+                console.error("❌ Error cargando categorías:", error);
+                document.getElementById("categoriesList").innerHTML =
+                    `<p class="col-span-full text-center text-red-600 text-sm py-4">Error al cargar categorías: ${error.message}</p>`;
+            }
+        }
+
+        function renderizarListaCategorias() {
+            const cont = document.getElementById("categoriesList");
+            cont.innerHTML = "";
+
+            if (categorias.length === 0) {
+                cont.innerHTML = `<p class="col-span-full text-center text-gray-400 text-sm py-4">No hay categorías todavía.</p>`;
+                return;
+            }
+
+            categorias.forEach(cat => {
+                const div = document.createElement("div");
+                div.className = "flex items-center justify-between gap-2 bg-gray-50 border border-gray-200 rounded-xl p-3";
+                div.innerHTML = `
+                    <span class="font-semibold text-gray-800 text-sm truncate">${cat.name}</span>
+                    <div class="flex gap-2 shrink-0">
+                        <button type="button" class="text-blue-600 hover:text-white hover:bg-blue-600 p-2 rounded-lg transition" title="Editar">
+                            ✏️
+                        </button>
+                        <button type="button" class="text-red-600 hover:text-white hover:bg-red-600 p-2 rounded-lg transition" title="Eliminar">
+                            🗑️
+                        </button>
+                    </div>
+                `;
+                div.querySelector("button[title='Editar']").addEventListener("click", () => iniciarEdicionCategoria(cat));
+                div.querySelector("button[title='Eliminar']").addEventListener("click", () => eliminarCategoria(cat));
+                cont.appendChild(div);
+            });
+        }
+
+        // =====================================================
+        // CATEGORÍAS: GUARDAR (agregar o editar)
+        // =====================================================
+
+        async function guardarCategoria() {
+            const input = document.getElementById("categoryName");
+            const nombre = input.value.trim();
+            const editingId = document.getElementById("editingCategoryId").value;
+            const btn = document.getElementById("saveCategoryBtn");
+
+            if (!nombre) {
+                mostrarMensajeCategoria("⚠️ Escribe el nombre de la categoría.", "warning");
+                input.focus();
+                return;
+            }
+
+            const slug = slugify(nombre);
+
+            btn.disabled = true;
+            btn.textContent = editingId ? "Guardando..." : "Agregando...";
+
+            try {
+                // Comprobar duplicado por slug
+                const { data: existentes, error: buscarError } = await supabaseClient
+                    .from(CATEGORIES_TABLE)
+                    .select("*")
+                    .eq("slug", slug);
+
+                if (buscarError) throw buscarError;
+
+                const duplicada = existentes && existentes.some(c => !editingId || String(c.id) !== String(editingId));
+                if (duplicada) {
+                    mostrarMensajeCategoria("⚠️ Esa categoría ya existe.", "warning");
+                    return;
+                }
+
+                if (editingId) {
+                    const { error } = await supabaseClient
+                        .from(CATEGORIES_TABLE)
+                        .update({ name: nombre, slug: slug })
+                        .eq("id", editingId);
+
+                    if (error) throw error;
+
+                    mostrarMensajeCategoria("✅ Categoría actualizada.", "success");
+                } else {
+                    const { error } = await supabaseClient
+                        .from(CATEGORIES_TABLE)
+                        .insert({ name: nombre, slug: slug });
+
+                    if (error) throw error;
+
+                    mostrarMensajeCategoria("✅ Categoría agregada.", "success");
+                }
+
+                cancelarEdicionCategoria();
+                await cargarCategorias();
+                await cargarProductosAdmin();
+
+            } catch (error) {
+                console.error("❌ Error guardando categoría:", error);
+                mostrarMensajeCategoria("❌ Error: " + error.message, "error");
+            } finally {
+                btn.disabled = false;
+                if (!document.getElementById("editingCategoryId").value) {
+                    btn.textContent = "Agregar categoría";
+                }
+            }
+        }
+
+        function iniciarEdicionCategoria(categoria) {
+            document.getElementById("categoryName").value = categoria.name;
+            document.getElementById("editingCategoryId").value = categoria.id;
+            document.getElementById("saveCategoryBtn").textContent = "Guardar cambios";
+            document.getElementById("cancelCategoryEditContainer").classList.remove("hidden");
+            document.getElementById("categoryName").focus();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function cancelarEdicionCategoria() {
+            document.getElementById("categoryName").value = "";
+            document.getElementById("editingCategoryId").value = "";
+            document.getElementById("saveCategoryBtn").textContent = "Agregar categoría";
+            document.getElementById("cancelCategoryEditContainer").classList.add("hidden");
+        }
+
+        async function eliminarCategoria(categoria) {
+            const confirmar = confirm(`¿Seguro que deseas eliminar la categoría "${categoria.name}"?`);
+            if (!confirmar) return;
+
+            try {
+                const { error } = await supabaseClient
+                    .from(CATEGORIES_TABLE)
+                    .delete()
+                    .eq("id", categoria.id);
+
+                if (error) {
+                    if (error.message && error.message.toLowerCase().includes("foreign key")) {
+                        mostrarMensajeCategoria("⚠️ No puedes eliminar esta categoría porque hay productos que la usan.", "warning");
+                        return;
+                    }
+                    throw error;
+                }
+
+                mostrarMensajeCategoria("✅ Categoría eliminada.", "success");
+                await cargarCategorias();
+
+            } catch (error) {
+                console.error("❌ Error eliminando categoría:", error);
+                mostrarMensajeCategoria("❌ No se pudo eliminar: " + error.message, "error");
+            }
+        }
+
+        // =====================================================
+        // PRODUCTOS: PREVISUALIZACIÓN DE IMAGEN
+        // =====================================================
+
+        document.getElementById("productImage").addEventListener("change", function () {
+            const file = this.files[0];
+            const container = document.getElementById("imagePreviewContainer");
+            const img = document.getElementById("imagePreview");
+
+            if (!file) {
+                container.classList.add("hidden");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                img.src = e.target.result;
+                container.classList.remove("hidden");
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // =====================================================
+        // PRODUCTOS: CARGAR LISTA
+        // =====================================================
+
+        async function cargarProductosAdmin() {
+            const cont = document.getElementById("productsList");
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from(PRODUCTS_TABLE)
+                    .select("*")
+                    .order("created_at", { ascending: false });
+
+                if (error) throw error;
+
+                productos = data || [];
+                cont.innerHTML = "";
+
+                if (productos.length === 0) {
+                    cont.innerHTML = `<p class="text-center text-gray-400 text-sm py-4">No hay productos todavía.</p>`;
+                    return;
+                }
+
+                productos.forEach(p => {
+                    const cat = categorias.find(c => c.slug === p.category);
+                    const catNombre = cat ? cat.name : (p.category || "Sin categoría");
+
+                    const div = document.createElement("div");
+                    div.className = "flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl p-3";
+                    div.innerHTML = `
+                        <img src="${p.image_url || 'https://placehold.co/80x80/0043A4/white?text=Madek'}" class="w-14 h-14 object-cover rounded-lg border border-gray-200 shrink-0">
+                        <div class="min-w-0 flex-1">
+                            <p class="font-bold text-gray-800 text-sm truncate">${p.name}</p>
+                            <p class="text-xs text-gray-500">${catNombre} · ${formatearPrecio(p.price)} · Stock: ${p.stock}</p>
+                        </div>
+                        <div class="flex gap-2 shrink-0">
+                            <button type="button" class="text-blue-600 hover:text-white hover:bg-blue-600 p-2 rounded-lg transition" title="Editar">✏️</button>
+                            <button type="button" class="text-red-600 hover:text-white hover:bg-red-600 p-2 rounded-lg transition" title="Eliminar">🗑️</button>
+                        </div>
+                    `;
+                    div.querySelector("button[title='Editar']").addEventListener("click", () => iniciarEdicionProducto(p));
+                    div.querySelector("button[title='Eliminar']").addEventListener("click", () => eliminarProducto(p));
+                    cont.appendChild(div);
+                });
+
+            } catch (error) {
+                console.error("❌ Error cargando productos:", error);
+                cont.innerHTML = `<p class="text-center text-red-600 text-sm py-4">Error al cargar productos: ${error.message}</p>`;
+            }
+        }
+
+        // =====================================================
+        // PRODUCTOS: GUARDAR (crear o actualizar)
+        // =====================================================
+
+        async function guardarProducto() {
+            const btn = document.getElementById("saveProductBtn");
+            const editingId = document.getElementById("editingProductId").value;
+
+            const datos = {
+                name: document.getElementById("productName").value.trim(),
+                price: Number(document.getElementById("productPrice").value) || 0,
+                category: document.getElementById("productCategory").value,
+                description: document.getElementById("productDescription").value.trim(),
+                stock: Number(document.getElementById("productStock").value) || 0
+            };
+
+            if (!datos.name) {
+                mostrarMensaje("⚠️ Escribe el nombre del producto.", "warning");
+                return;
+            }
+            if (!datos.category) {
+                mostrarMensaje("⚠️ Selecciona una categoría.", "warning");
+                return;
+            }
+
+            const archivo = document.getElementById("productImage").files[0];
+
+            btn.disabled = true;
+            btn.textContent = editingId ? "Actualizando..." : "Guardando...";
+
+            try {
+                // Subir imagen si el usuario seleccionó una
+                if (archivo) {
+                    btn.textContent = "Subiendo imagen...";
+
+                    const nombreArchivo = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${archivo.name.split('.').pop()}`;
+
+                    const { error: uploadError } = await supabaseClient
+                        .storage
+                        .from(STORAGE_BUCKET)
+                        .upload(nombreArchivo, archivo, { upsert: false });
+
+                    if (uploadError) throw uploadError;
+
+                    const { data: publicUrlData } = supabaseClient
+                        .storage
+                        .from(STORAGE_BUCKET)
+                        .getPublicUrl(nombreArchivo);
+
+                    datos.image_url = publicUrlData.publicUrl;
+                }
+
+                btn.textContent = editingId ? "Actualizando producto..." : "Creando producto...";
+
+                if (editingId) {
+                    const { error } = await supabaseClient
+                        .from(PRODUCTS_TABLE)
+                        .update(datos)
+                        .eq("id", editingId);
+
+                    if (error) throw error;
+
+                    mostrarMensaje("✅ Producto actualizado.", "success");
+                } else {
+                    if (!archivo) {
+                        mostrarMensaje("⚠️ Selecciona una imagen para el producto.", "warning");
+                        return;
+                    }
+
+                    const { error } = await supabaseClient
+                        .from(PRODUCTS_TABLE)
+                        .insert(datos);
+
+                    if (error) throw error;
+
+                    mostrarMensaje("✅ Producto guardado correctamente.", "success");
+                }
+
+                cancelarEdicionProducto();
+                await cargarProductosAdmin();
+
+            } catch (error) {
+                console.error("❌ Error guardando producto:", error);
+                mostrarMensaje("❌ Error: " + error.message, "error");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = document.getElementById("editingProductId").value ? "Guardar cambios" : "Guardar producto";
+            }
+        }
+
+        function iniciarEdicionProducto(producto) {
+            document.getElementById("editingProductId").value = producto.id;
+            document.getElementById("productName").value = producto.name || "";
+            document.getElementById("productPrice").value = producto.price || 0;
+            document.getElementById("productCategory").value = producto.category || "";
+            document.getElementById("productDescription").value = producto.description || "";
+            document.getElementById("productStock").value = producto.stock || 0;
+
+            const previewContainer = document.getElementById("imagePreviewContainer");
+            const preview = document.getElementById("imagePreview");
+            if (producto.image_url) {
+                preview.src = producto.image_url;
+                previewContainer.classList.remove("hidden");
+            } else {
+                previewContainer.classList.add("hidden");
+            }
+
+            document.getElementById("formTitle").textContent = "Editar producto";
+            document.getElementById("saveProductBtn").textContent = "Guardar cambios";
+            document.getElementById("cancelProductEditBtn").classList.remove("hidden");
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function cancelarEdicionProducto() {
+            document.getElementById("editingProductId").value = "";
+            document.getElementById("productName").value = "";
+            document.getElementById("productPrice").value = "";
+            document.getElementById("productCategory").value = "";
+            document.getElementById("productDescription").value = "";
+            document.getElementById("productStock").value = "0";
+            document.getElementById("productImage").value = "";
+            document.getElementById("imagePreviewContainer").classList.add("hidden");
+
+            document.getElementById("formTitle").textContent = "Agregar nuevo producto";
+            document.getElementById("saveProductBtn").textContent = "Guardar producto";
+            document.getElementById("cancelProductEditBtn").classList.add("hidden");
+        }
+
+        async function eliminarProducto(producto) {
+            const confirmar = confirm(`¿Seguro que deseas eliminar "${producto.name}"?`);
+            if (!confirmar) return;
+
+            try {
+                const { error } = await supabaseClient
+                    .from(PRODUCTS_TABLE)
+                    .delete()
+                    .eq("id", producto.id);
+
+                if (error) throw error;
+
+                mostrarMensaje("✅ Producto eliminado.", "success");
+                await cargarProductosAdmin();
+
+            } catch (error) {
+                console.error("❌ Error eliminando producto:", error);
+                mostrarMensaje("❌ No se pudo eliminar: " + error.message, "error");
+            }
+        }
+
+        // =====================================================
+        // INICIAR
+        // =====================================================
+
+        document.addEventListener("DOMContentLoaded", function () {
+            verificarSesion();
+        });
+
+    </script>
 
 </body>
 </html>
