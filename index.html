@@ -103,6 +103,8 @@
         <i class="fa-solid fa-bag-shopping text-xl"></i>
         <span id="cartCountBadge" class="hidden absolute top-0.5 right-0.5 bg-red-500 text-white text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold">0</span>
     </button>
+    <!-- Acceso discreto al panel administrativo -->
+    
 </div>
             </div>
         </div>
@@ -131,22 +133,11 @@
     </section>
 
     <section class="py-3 px-4 bg-white sticky top-[69px] z-30 border-b border-gray-100">
-        <div class="max-w-md mx-auto flex gap-2 overflow-x-auto no-scrollbar py-1">
+        <div class="max-w-md mx-auto flex gap-2 overflow-x-auto no-scrollbar py-1" id="categoryButtonsContainer">
             <button onclick="filterCategory('all')" id="catBtn-all" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold tracking-wide whitespace-nowrap bg-madek-blue text-white transition-all shadow-sm">
                 Todos <span class="ml-1 text-[10px] bg-white/20 px-1.5 py-0.5 rounded-full" id="allCount">0</span>
             </button>
-            <button onclick="filterCategory('skincare')" id="catBtn-skincare" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold tracking-wide whitespace-nowrap bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all border border-gray-200">
-                Cuidado Facial <span class="ml-1 text-[10px] bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded-full" id="skincareCount">0</span>
-            </button>
-            <button onclick="filterCategory('labios')" id="catBtn-labios" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold tracking-wide whitespace-nowrap bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all border border-gray-200">
-                Labios <span class="ml-1 text-[10px] bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded-full" id="labiosCount">0</span>
-            </button>
-            <button onclick="filterCategory('corporal')" id="catBtn-corporal" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold tracking-wide whitespace-nowrap bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all border border-gray-200">
-                Splash & Corporal <span class="ml-1 text-[10px] bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded-full" id="corporalCount">0</span>
-            </button>
-            <button onclick="filterCategory('moda')" id="catBtn-moda" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold tracking-wide whitespace-nowrap bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all border border-gray-200">
-                Moda Modesta <span class="ml-1 text-[10px] bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded-full" id="modaCount">0</span>
-            </button>
+            <!-- Los botones de categoría se generan dinámicamente desde Supabase -->
         </div>
     </section>
 
@@ -190,7 +181,7 @@
 
             <!-- Imagen Principal con Switch Foto Real -->
             <div class="bg-gray-50 rounded-2xl overflow-hidden aspect-square relative mb-4 shrink-0 flex items-center justify-center border border-gray-100 shadow-sm">
-                <img id="detailProductImage" src="" alt="" class="object-cover w-full h-full">
+                <img id="detailProductImage" src="" alt="" class="object-contain w-full h-full">
                 
             </div>
 
@@ -306,12 +297,26 @@
             <span class="text-[9px] font-bold uppercase tracking-wider">Bolsa</span>
         </button>
     </nav>
+
+    <!-- Acceso discreto al panel administrativo -->
+<!-- Acceso discreto al panel administrativo -->
+<a href="admin.html"
+   aria-label="Panel administrativo"
+   class="fixed bottom-0 left-1/2 -translate-x-1/2
+          translate-y-[7px]
+          text-madek-blue text-[11px] z-50
+          bg-white rounded-full px-1.5
+          active:scale-90 transition-transform">
+    <i class="fa-solid fa-heart"></i>
+</a>
+
+
    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
    <script>
-         const SUPABASE_URL = "https://rmvnvvwjdvtiptpceofp.supabase.co";
+         const SUPABASE_URL = "https://phjloiqnnshgayrfkfbl.supabase.co";
 
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJtdm52dndqZHZ0aXB0cGNlb2ZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzNTE0ODIsImV4cCI6MjEwMDkyNzQ4Mn0.j2tqBL393gQQkYkCDBRd78ZLYQ9zVkGhVxAK67t90yw";
+        const SUPABASE_KEY = "sb_publishable_QVMZnnEJcfkujinw0w82QQ_qBfPTYo-";
 
         const supabaseClient = supabase.createClient(
           SUPABASE_URL,
@@ -319,386 +324,8 @@
       );
     </script>
     <script>
-        const products = [
-            { 
-                id: 26, 
-                name: "Splash mini de purpure bubble gum", 
-                price: 18000, 
-                category: "corporal", 
-                imgPromo: "Imagen 26.png", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 27, 
-                name: "Protector solar de vitamina C bioaqua", 
-                price: 13000, 
-                category: "skincare", 
-                imgPromo: "Imagen 27.png", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 28, 
-                name: "Protector solar de acido hialuronico bioaqua", 
-                price: 15000, 
-                category: "skincare", 
-                imgPromo: "Imagen 28.png", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 29, 
-                name: "Protector solar de arroz bioaqua", 
-                price: 18000, 
-                category: "skincare", 
-                imgPromo: "Imagen 29.png", 
-                description: "",
-                stock: 0
-            },
-            { 
-                id: 30, 
-                name: "Hidratante noche de Lula", 
-                price: 26000, 
-                category: "skincare", 
-                imgPromo: "Imagen 30.png", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 31, 
-                name: "Hidratante mañana de Lula", 
-                price: 30000, 
-                category: "skincare", 
-                imgPromo: "Imagen 31.jpeg", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 32, 
-                name: "Crema facial de niacinamida bioaqua", 
-                price: 14000, 
-                category: "skincare", 
-                imgPromo: "Imagen 32.JPG", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 33, 
-                name: "Crema facial de acido hialuronico bioaqua", 
-                price: 13000, 
-                category: "skincare", 
-                imgPromo: "Imagen 33.jpg", 
-                description: "",
-                stock: 15
-            },
-           { 
-                id: 34, 
-                name: "Crema facial vitamina C bioaqua", 
-                price: 15000, 
-                category: "skincare", 
-                imgPromo: "Imagen 34.png", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 35, 
-                name: "Crema facial de acido hialuronico bioaqua", 
-                price: 15000, 
-                category: "skincare", 
-                imgPromo: "Imagen 35.jpg", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 36, 
-                name: "Crema facial de rosas y hialuronico bioaqua", 
-                price: 14000, 
-                category: "skincare", 
-                imgPromo: "Imagen 36.png", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 37, 
-                name: "Jabon facial de acido hialuronico", 
-                price: 13000, 
-                category: "skincare", 
-                imgPromo: "Imagen 37.jpg", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 38, 
-                name: "Jabon facial de rosas y acido hialuronico", 
-                price: 13000, 
-                category: "skincare", 
-                imgPromo: "Imagen 38.png", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 39, 
-                name: "Jabon facial de aloe vera bioaqua", 
-                price: 14000, 
-                category: "skincare", 
-                imgPromo: "Imagen 39.png", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 40, 
-                name: "Tonico de vitamina C bioaqua", 
-                price: 18000, 
-                category: "skincare", 
-                imgPromo: "Imagen 40.png", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 41, 
-                name: "Pestañina transparente de trendy", 
-                price: 15000, 
-                category: "skincare", 
-                imgPromo: "Imagen 41.jpg", 
-                description: "",
-                stock: 0
-            },
-            { 
-                id: 42, 
-                name: "Gel de cejas de melu", 
-                price: 19000, 
-                category: "skincare", 
-                imgPromo: "Imagen 42.png", 
-                description: "",
-                stock: 15
-            },
-            { 
-                id: 1, 
-                name: "Mascarilla 3 Pasos Bioaqua", 
-                price: 5000, 
-                category: "skincare", 
-                imgPromo: "Imagen 20.png", 
-                description: "Elimina los puntos negros de tu nariz de manera efectiva y sencilla. Incluye tres tiras nasales que ayudan a suavizar, remover profundamente las espinillas y limpiar impurezas. Fórmula balanceada para el cuidado de tu piel.",
-                stock: 15
-            },
-            { 
-                id: 2, 
-                name: "Parches Círculos Bye Granos Bloomshell", 
-                price: 12000, 
-                category: "skincare", 
-                imgPromo: "Imagen 21.png",  
-                description: "Ideales para tratar barritos y espinillas. Estas pegatinas adhesivas se colocan sobre el granito absorbiendo el exceso de grasa y calmando la inflamación gracias a su contenido de ácido salicílico y extracto de árbol de té.",
-                stock: 12
-            },
-            { 
-                id: 4, 
-                name: "Tratamiento Fortalecedor y de Crecimiento para Pestañas Bioaqua", 
-                price: 12000, 
-                category: "skincare", 
-                imgPromo: "Imagen 22.jpeg", 
-                description: "Nutre las pestañas desde la raíz hasta las puntas, añade grosor, resuelve el problema de escasez o falta de largo en las pestañas para lucir una mirada impactante y natural.",
-                stock: 0
-            },
-            { 
-                id: 6, 
-                name: "Protector Solar Retinol Bioaqua", 
-                price: 13000, 
-                category: "skincare", 
-                imgPromo: "Imagen 24.png",  
-                description: "Protege tu piel mientras combates los signos del envejecimiento con el innovador Bloqueador Solar Bioaqua con Retinol. Esta fórmula avanzada ofrece una alta protección SPF 50+ contra los rayos UVB y PA+++ contra los UVA, renovando tu cutis durante el día.",
-                stock: 11
-            },
-            { 
-                id: 15, 
-                name: "Tónico Facial Rosas + Colágeno Purpure", 
-                price: 20000, 
-                category: "skincare", 
-                imgPromo: "Imagen 13.png", 
-                description: "Refresca y equilibra tu piel con el Tónico Facial Agua de Rosas Purpure. Su fórmula delicada calma y revitaliza. Enriquecido con colágeno, elastina, ácido hialurónico, vitamina C y E, libre de parabenos.",
-                stock: 14
-            },
-            { 
-                id: 16, 
-                name: "Limpiador Facial Bifásico con Extracto de Centella Lula", 
-                price: 35000, 
-                category: "skincare", 
-                imgPromo: "Imagen 12.png", 
-                description: "Este limpiador combina lo mejor del agua y el aceite para eliminar fácilmente el maquillaje (incluso el resistente al agua) sin dejar sensación grasosa ni resecar. Ideal para todo tipo de piel, incluso las más sensibles.",
-                stock: 10
-            },
-            { 
-                id: 17, 
-                name: "Caja Parches de Ojos Retinol Bioaqua", 
-                price: 15000, 
-                category: "skincare", 
-                imgPromo: "Imagen 11.jpg", 
-                description: "Formulados para el cuidado intensivo del contorno de ojos, ayudando a hidratar y mejorar la apariencia de la piel. Su combinación de colágeno, extractos de algas y retinol contribuye a una piel más suave. Contiene 80 parches.",
-                stock: 12
-            },
-            { 
-                id: 18, 
-                name: "Crema Hidratante Flor de Cerezo Bioaqua", 
-                price: 15000, 
-                category: "skincare", 
-                imgPromo: "Imagen 10.jpg", 
-                description: "Revitaliza tu piel con la Crema Facial flor de cerezo, diseñada para nutrir, hidratar y restaurar la suavidad y elasticidad, devolviendo un aspecto fresco y luminoso.",
-                stock: 15
-            },
-            { 
-                id: 20, 
-                name: "Hidratante Facial en Barra Lula", 
-                price: 21000, 
-                category: "skincare", 
-                imgPromo: "Imagen 8.png", 
-                description: "Barra hidratante. Pepino: Calma y descongestiona con cafeína estimulante. Rosas: Devuelve la frescura y el brillo natural para pieles que lucen cansadas o sin vida.",
-                stock: 11
-            },
-            { 
-                id: 21, 
-                name: "Hidratante de Aloe Vera Lula", 
-                price: 19500, 
-                category: "skincare", 
-                imgPromo: "Imagen 7.png", 
-                description: "Hidrata, nutre y calma la piel al instante. Textura fresca y de rápida absorción que te brinda una maravillosa sensación de confort. Rostro suave y equilibrado.",
-                stock: 14
-            },
-            { 
-                id: 22, 
-                name: "Vitamina C 100 ml Bioaqua", 
-                price: 16000, 
-                category: "skincare", 
-                imgPromo: "Imagen 6.jpg",  
-                description: "Suero de vitamina C de alta concentración. Poderoso antioxidante que desacelera la oxidación celular y previene el envejecimiento prematuro de la piel.",
-                stock: 0
-            },
-            { 
-                id: 23, 
-                name: "Serum Rejuvenecedor Colágeno Bioaqua", 
-                price: 12000, 
-                category: "skincare", 
-                imgPromo: "Imagen 5.png", 
-                description: "Suero facial enriquecido con colágeno tipo III, formulado para hidratar profundamente, revitalizar la piel, mejorar la firmeza y aportar una apariencia más juvenil.",
-                stock: 13
-            },
-            { 
-                id: 24, 
-                name: "Contorno de Ojos con Aloe Vera Lula", 
-                price: 19500, 
-                category: "skincare", 
-                imgPromo: "Imagen 4.png", 
-                description: "Cremita ligera que hidrata, revitaliza y despierta la mirada. Reduce la apariencia de ojeras, bolsas y finas líneas de expresión de la zona ocular.",
-                stock: 10
-            },
-            { 
-                id: 25, 
-                name: "Contorno para Ojos de Arándanos Bioaqua", 
-                price: 9000, 
-                category: "skincare", 
-                imgPromo: "Imagen 3.png", 
-                description: "Nutrición intensiva para el área delicada de tus ojos. Ayuda a revitalizar, suavizar y desinflamar la piel para lucir una mirada más joven y fresca.",
-                stock: 16
-            },
-            { 
-                id: 8, 
-                name: "Lip Balm Hidratante Karite con Destellos", 
-                price: 7000, 
-                category: "labios", 
-                imgPromo: "Imagen 18.png", 
-                description: "Bálsamo labial ultra hidratante que aporta nutrición intensa y deja un acabado con sutiles y elegantes destellos mágicos. Perfecto para tus labios secos.",
-                stock: 20
-            },
-            { 
-                id: 9, 
-                name: "Bálsamo Hidratante Frutal Bioaqua", 
-                price: 5000, 
-                category: "labios", 
-                imgPromo: "Imagen 16.jpg", 
-                description: "Bálsamo labial hidratante disponible en extractos naturales. Restaura la jugosidad natural de tus labios y previene el agrietamiento.",
-                stock: 0
-            },
-            { 
-                id: 12, 
-                name: "Bálsamo Hidratante en Barra Long Lasting Ushas", 
-                price: 8000, 
-                category: "labios", 
-                imgPromo: "Imagen 17.png", 
-                description: "Bálsamo labial de larga duración marca Ushas. No aporta color, ideal para mantener tus labios nutridos con un brillo sutil y natural durante todo el día.",
-                stock: 15
-            },
-            { 
-                id: 13, 
-                name: "Mascarilla Reparadora de Labios Alissha", 
-                price: 11500, 
-                category: "labios", 
-                imgPromo: "Imagen 15.png", 
-                description: "Overnight Lip Mask Alissha Rosy Kiss. Enriquecida con ácido hialurónico, aceites esenciales y vitaminas para una restauración profunda mientras duermes.",
-                stock: 10
-            },
-            { 
-                id: 14, 
-                name: "Mini Splash Cabello y Cuerpo Purpure 100ml", 
-                price: 18000, 
-                category: "corporal", 
-                imgPromo: "Imagen 14.jpg",  
-                description: "Disfruta de una sensación de frescura inmediata en tu cuerpo y cabello con nuestro splash de deliciosos y duraderos aromas dulces y envolventes.",
-                stock: 0
-            },
-            { 
-                id: 10, 
-                name: "Jabon Facial Nicotinamide Bioaqua", 
-                price: 14000, 
-                category: "skincare", 
-                imgPromo: "Imagen 2.jpg", 
-                description: "Espuma limpiadora facial con niacinamida y bifid yeast, ideal para purificar los poros, eliminar el exceso de grasa y suavizar la textura de la piel. Su fórmula densa y rica ayuda a remover impurezas sin resecar, dejando el rostro fresco, limpio y visiblemente más luminoso. Apto para uso diario",
-                stock: 0
-            },
-            { 
-                id: 11, 
-                name: "Jabon Facial Arroz Bioaqua", 
-                price: 12500, 
-                category: "skincare", 
-                imgPromo: "Imagen 1.jpg", 
-                description: "Lavarse la piel en la noche es un hábito clave de belleza, ya que permite que el rostro descanse de la contaminación y las impurezas acumuladas durante el día. Ayuda a mantener la piel más sana, fresca y luminosa, mientras limpia suavemente, hidrata, aclara el tono y elimina células muertas.",
-                stock: 0
-            },
-            { 
-                id: 3, 
-                name: "Kit Facial Antiacné x3 Bioaqua", 
-                price: 45000, 
-                category: "skincare", 
-                imgPromo: "Imagen 19.jpg",
-                description: "Tratamiento completo de tres pasos que controla la grasa, ayuda a desvanecer y cicatrizar marcas de acné previniendo nuevos brotes. Hidrata profundamente sin tapar los poros de tu rostro.",
-                stock: 0
-            },
-            { 
-                id: 19, 
-                name: "Mascarilla Ácido Salicílico Bioaqua", 
-                price: 14000, 
-                category: "skincare", 
-                imgPromo: "Imagen 9.jpg", 
-                description: "Combate eficazmente la piel grasa y poros obstruidos, penetrando profundamente para disolver restos de células muertas. Ideal para tratar barritos y poros rojos inflamados.",
-                stock: 0
-            },
-            { 
-                id: 7, 
-                name: "Protector Solar Niacinamida Bioaqua", 
-                price: 13000, 
-                category: "skincare", 
-                imgPromo: "Imagen 25.jpg", 
-                description: "Protector solar facial con niacinamida y textura ligera, ideal para mantener la piel hidratada, fresca y con una apariencia más luminosa. Su fórmula de rápida absorción deja un acabado suave y cómodo para el uso diario, sin sensación grasosa.",
-                stock: 0
-            },
-            { 
-                id: 5, 
-                name: "Protector Solar Textura Fluida 60 SPF Aloe Vera Bioaqua", 
-                price: 15000, 
-                category: "skincare", 
-                imgPromo: "Imagen 23", 
-                description: "El Protector solar con extracto de aloe vera 60 SPF de Bioaqua, no solo te brinda una potente protección contra los daños del sol, sino que también nutre tu piel con las propiedades calmantes e hidratantes del aloe vera.",
-                stock: 0
-            }
-        ];
+        let products = [];
+        let categories = [];
 
         let cart = [];
         let currentCategory = 'all';
@@ -707,17 +334,65 @@
         let selectedProductForDetail = null;
         let activeImageStates = {}; 
 
-        // Al iniciar la app
-        window.onload = function() {
-            // Inicializar estados de fotos
-            products.forEach(p => {
-                activeImageStates[p.id] = 'promo'; 
-            });
-
-            updateCategoryBadges();
-            renderCatalog();
+        // Al iniciar la app: cargamos categorías y productos reales desde Supabase
+        window.onload = async function() {
+            await cargarDatosIniciales();
             setupSearch();
         };
+
+        async function cargarDatosIniciales() {
+            try {
+                const { data: categoriasData, error: catError } = await supabaseClient
+                    .from('categories')
+                    .select('*')
+                    .order('name', { ascending: true });
+
+                if (catError) throw catError;
+                categories = categoriasData || [];
+
+                const { data: productosData, error: prodError } = await supabaseClient
+                    .from('products')
+                    .select('*')
+                    .eq('is_active', true)
+                    .order('created_at', { ascending: false });
+
+                if (prodError) throw prodError;
+
+                products = (productosData || []).map(p => ({
+                    ...p,
+                    imgPromo: p.image_url || 'https://placehold.co/400x400/0043A4/white?text=Madek',
+                    imgReal: p.image_url || 'https://placehold.co/400x400/0043A4/white?text=Madek'
+                }));
+
+                products.forEach(p => {
+                    activeImageStates[p.id] = 'promo';
+                });
+
+                renderCategoryButtons();
+                updateCategoryBadges();
+                renderCatalog();
+
+            } catch (error) {
+                console.error('❌ Error cargando datos desde Supabase:', error);
+                document.getElementById('itemsFoundText').textContent = 'No se pudo cargar el catálogo. Intenta de nuevo más tarde.';
+            }
+        }
+
+        function renderCategoryButtons() {
+            const container = document.getElementById('categoryButtonsContainer');
+
+            // Eliminar botones dinámicos previos (todo menos el de "Todos")
+            container.querySelectorAll('.category-btn-dynamic').forEach(btn => btn.remove());
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.onclick = () => filterCategory(cat.slug);
+                btn.id = `catBtn-${cat.slug}`;
+                btn.className = 'category-btn category-btn-dynamic px-4 py-2 rounded-xl text-xs font-semibold tracking-wide whitespace-nowrap bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all border border-gray-200';
+                btn.innerHTML = `${cat.name} <span class="ml-1 text-[10px] bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded-full" id="count-${cat.slug}">0</span>`;
+                container.appendChild(btn);
+            });
+        }
 
         function renderCatalog() {
             const grid = document.getElementById('productsGrid');
@@ -729,6 +404,13 @@
                 const matchesSearch = product.name.toLowerCase().includes(searchQuery) || 
                                       product.description.toLowerCase().includes(searchQuery);
                 return matchesCategory && matchesSearch;
+            });
+
+            // Ordenar: primero los productos con stock, al final los agotados
+            filtered.sort((a, b) => {
+                const aOut = a.stock === 0 ? 1 : 0;
+                const bOut = b.stock === 0 ? 1 : 0;
+                return aOut - bOut;
             });
 
             // Actualizar contador
@@ -753,10 +435,7 @@
                 // Formatear precio
                 const formattedPrice = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(p.price);
 
-                let catLabel = "Moda Modesta";
-                if (p.category === 'skincare') catLabel = "Cuidado Facial";
-                else if (p.category === 'labios') catLabel = "Labios";
-                else if (p.category === 'corporal') catLabel = "Splash & Corporal";
+                const catLabel = nombreCategoria(p.category);
 
 const isOutOfStock = p.stock === 0; // Verifica si no hay inventario
 
@@ -764,7 +443,7 @@ const cardHTML = `
     <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 p-2.5 flex flex-col justify-between h-full shadow-sm relative ${isOutOfStock ? 'opacity-75' : ''}">
         <div onclick="${isOutOfStock ? '' : `openProductDetail(${p.id})`}" class="${isOutOfStock ? '' : 'cursor-pointer'}">
             <div class="bg-madek-cream/50 rounded-xl overflow-hidden aspect-square mb-2.5 flex items-center justify-center relative border border-gray-50">
-                <img src="${currentImg}" alt="${p.name}" class="object-cover w-full h-full transition-transform duration-300">
+                <img src="${currentImg}" alt="${p.name}" class="object-contain w-full h-full transition-transform duration-300">
                 ${isOutOfStock ? `
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
                         <span class="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded-lg uppercase tracking-wider">Agotado</span>
@@ -827,10 +506,15 @@ const cardHTML = `
 
         function updateCategoryBadges() {
             document.getElementById('allCount').textContent = products.length;
-            document.getElementById('skincareCount').textContent = products.filter(p => p.category === 'skincare').length;
-            document.getElementById('labiosCount').textContent = products.filter(p => p.category === 'labios').length;
-            document.getElementById('corporalCount').textContent = products.filter(p => p.category === 'corporal').length;
-            document.getElementById('modaCount').textContent = products.filter(p => p.category === 'moda').length;
+            categories.forEach(cat => {
+                const el = document.getElementById(`count-${cat.slug}`);
+                if (el) el.textContent = products.filter(p => p.category === cat.slug).length;
+            });
+        }
+
+        function nombreCategoria(slug) {
+            const cat = categories.find(c => c.slug === slug);
+            return cat ? cat.name : (slug || 'Sin categoría');
         }
 
         function filterCategory(category) {
@@ -1011,13 +695,8 @@ const cardHTML = `
 
     // Datos del Modal
     document.getElementById('detailProductName').textContent = product.name;
-    
-    let catLabel = "Moda Modesta";
-    if (product.category === 'skincare') catLabel = "Cuidado Facial";
-    else if (product.category === 'labios') catLabel = "Labios";
-    else if (product.category === 'corporal') catLabel = "Splash & Corporal";
 
-    document.getElementById('detailProductCategory').textContent = catLabel;
+    document.getElementById('detailProductCategory').textContent = nombreCategoria(product.category);
     document.getElementById('detailProductPrice').textContent = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(product.price);
     document.getElementById('detailProductDesc').textContent = product.description;
 
